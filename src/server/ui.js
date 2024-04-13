@@ -48,5 +48,5 @@ export const openDialogMovie = () => {
   const html = HtmlService.createHtmlOutputFromFile('dialog-add-movie')
     .setWidth(600)
     .setHeight(600);
-  SpreadsheetApp.getUi().showModalDialog(html, 'Sheet Editor (Tailwind CSS)');
+  SpreadsheetApp.getUi().showModalDialog(html, 'Add Movie function');
 };

@@ -71,6 +71,12 @@ const clientEntrypoints = [
     template: './src/client/dialog-demo-tailwindcss/index.html',
   },
   {
+    name: 'CLIENT - Dialog Add Movie',
+    entry: './src/client/dialog-add-movie/index.js',
+    filename: 'dialog-add-movie',
+    template: './src/client/dialog-add-movie/index.html',
+  },
+  {
     name: 'CLIENT - Sidebar About Page',
     entry: './src/client/sidebar-about-page/index.js',
     filename: 'sidebar-about-page',
