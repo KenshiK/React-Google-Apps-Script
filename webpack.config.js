@@ -106,6 +106,7 @@ const copyFilesConfig = {
         },
       ],
     }),
+    new webpack.HotModuleReplacementPlugin()
   ],
 };
 

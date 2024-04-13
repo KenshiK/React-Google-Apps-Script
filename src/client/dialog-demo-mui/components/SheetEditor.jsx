@@ -36,7 +36,7 @@ const SheetEditor = () => {
   return (
     <div style={{ padding: '3px', overflowX: 'hidden' }}>
       <Typography variant="h4" gutterBottom>
-        ☀️ MUI demo! ☀️
+        ☀️ MUI demo!2 ☀️
       </Typography>
 
       <Typography variant="body1" gutterBottom sx={{ marginBottom: '30px' }}>

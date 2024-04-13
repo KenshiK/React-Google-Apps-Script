@@ -5,6 +5,7 @@ export const onOpen = () => {
     .addItem('Sheet Editor (Bootstrap)', 'openDialogBootstrap')
     .addItem('Sheet Editor (MUI)', 'openDialogMUI')
     .addItem('Sheet Editor (Tailwind CSS)', 'openDialogTailwindCSS')
+    .addItem('Ajouter un film', 'openDialogMovie')
     .addItem('About me', 'openAboutSidebar');
 
   menu.addToUi();
@@ -41,4 +42,11 @@ export const openDialogTailwindCSS = () => {
 export const openAboutSidebar = () => {
   const html = HtmlService.createHtmlOutputFromFile('sidebar-about-page');
   SpreadsheetApp.getUi().showSidebar(html);
+};
+
+export const openDialogMovie = () => {
+  const html = HtmlService.createHtmlOutputFromFile('dialog-add-movie')
+    .setWidth(600)
+    .setHeight(600);
+  SpreadsheetApp.getUi().showModalDialog(html, 'Sheet Editor (Tailwind CSS)');
 };
