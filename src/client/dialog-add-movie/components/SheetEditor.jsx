@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Button, Typography } from '@mui/material';
 
 import FormInput from './FormInput';
+import TextInput from './TextInput';
 import SheetTable from './SheetTable';
 
 
@@ -29,6 +30,17 @@ const SheetEditor = () => {
     }
   };
 
+  const submitNewMovie = async (newMovie) => {
+    try {
+      const response = await serverFunctions.addMovie(newMovie);
+      setDates(response);
+    } catch (error) {
+      // eslint-disable-next-line no-alert
+      alert(error);
+    }
+  };
+
+
   return (
     <div style={{ padding: '3px', overflowX: 'hidden' }}>
       <Typography variant="h4" gutterBottom>
@@ -41,21 +53,11 @@ const SheetEditor = () => {
         enter and the new sheet will be created. Click the red button next to the sheet date to
         delete it.
       </Typography>
-      <FormInput/>
-
-      {dates.length > 0 &&
-        <SheetTable rows={dates.map((name) => {
-          return {
-            sheetDate: date.name,
-            deleteButton: <Button
-              variant="contained"
-              color="error"
-              onClick={() => deleteDate(date.index)}
-            >Delete</Button>
-          }
-        })} />}
-
-      <Button color="success">Submit</Button>
+      <TextInput 
+        label="Votre film!" 
+        caption="Enter the name for your new movie. If you dare"
+        submitNewMovie={submitNewMovie} 
+        />
     </div>
   );
 };

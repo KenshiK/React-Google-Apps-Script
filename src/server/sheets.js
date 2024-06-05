@@ -29,3 +29,12 @@ export const setActiveSheet = (sheetName) => {
   SpreadsheetApp.getActive().getSheetByName(sheetName).activate();
   return getSheetsData();
 };
+
+export const addMovie = (movieName) => {
+  appendToColumn("Movies", "A", movieName);
+}
+
+function appendToColumn(sheet, column, content) {
+  var lastRow = sheet.getLastRow() + 1;
+  sheet.getRange(column + lastRow).setValue(content);
+}
