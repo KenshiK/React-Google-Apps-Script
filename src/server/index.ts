@@ -1,10 +1,9 @@
 import {
   onOpen,
   openDialog,
-  openDialogBootstrap,
   openDialogMUI,
-  openDialogTailwindCSS,
   openDialogMovie,
+  openDialogSeance,
   openAboutSidebar,
 } from './ui';
 
@@ -14,10 +13,9 @@ import { getSheetsData, addSheet, deleteSheet, setActiveSheet, addMovie } from '
 export {
   onOpen,
   openDialog,
-  openDialogBootstrap,
   openDialogMUI,
-  openDialogTailwindCSS,
   openDialogMovie,
+  openDialogSeance,
   openAboutSidebar,
   getSheetsData,
   addSheet,

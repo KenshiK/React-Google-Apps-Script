@@ -1,3 +1,5 @@
+const movieSheetName = "Movies"
+
 const getSheets = () => SpreadsheetApp.getActive().getSheets();
 
 const getActiveSheetName = () => SpreadsheetApp.getActive().getSheetName();
@@ -30,8 +32,11 @@ export const setActiveSheet = (sheetName) => {
   return getSheetsData();
 };
 
+
+// Add Movie 
 export const addMovie = (movieName) => {
-  appendToColumn("Movies", "A", movieName);
+  var movieSheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(movieSheetName);
+  appendToColumn(movieSheet, "A", movieName);
 }
 
 function appendToColumn(sheet, column, content) {

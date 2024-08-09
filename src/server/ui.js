@@ -2,10 +2,9 @@ export const onOpen = () => {
   const menu = SpreadsheetApp.getUi()
     .createMenu('My Sample React Project') // edit me!
     .addItem('Sheet Editor', 'openDialog')
-    .addItem('Sheet Editor (Bootstrap)', 'openDialogBootstrap')
     .addItem('Sheet Editor (MUI)', 'openDialogMUI')
-    .addItem('Sheet Editor (Tailwind CSS)', 'openDialogTailwindCSS')
     .addItem('Ajouter un film', 'openDialogMovie')
+    .addItem('Ajouter une séance', 'openDialogSeance')
     .addItem('About me', 'openAboutSidebar');
 
   menu.addToUi();
@@ -18,25 +17,12 @@ export const openDialog = () => {
   SpreadsheetApp.getUi().showModalDialog(html, 'Sheet Editor');
 };
 
-export const openDialogBootstrap = () => {
-  const html = HtmlService.createHtmlOutputFromFile('dialog-demo-bootstrap')
-    .setWidth(600)
-    .setHeight(600);
-  SpreadsheetApp.getUi().showModalDialog(html, 'Sheet Editor (Bootstrap)');
-};
 
 export const openDialogMUI = () => {
   const html = HtmlService.createHtmlOutputFromFile('dialog-demo-mui')
     .setWidth(600)
     .setHeight(600);
   SpreadsheetApp.getUi().showModalDialog(html, 'Sheet Editor (MUI)');
-};
-
-export const openDialogTailwindCSS = () => {
-  const html = HtmlService.createHtmlOutputFromFile('dialog-demo-tailwindcss')
-    .setWidth(600)
-    .setHeight(600);
-  SpreadsheetApp.getUi().showModalDialog(html, 'Sheet Editor (Tailwind CSS)');
 };
 
 export const openAboutSidebar = () => {
@@ -49,4 +35,11 @@ export const openDialogMovie = () => {
     .setWidth(600)
     .setHeight(600);
   SpreadsheetApp.getUi().showModalDialog(html, 'Ajouter un nouveau film');
+};
+
+export const openDialogSeance = () => {
+  const html = HtmlService.createHtmlOutputFromFile('dialog-add-seance')
+    .setWidth(600)
+    .setHeight(600);
+  SpreadsheetApp.getUi().showModalDialog(html, 'Ajouter une nouvelle seance');
 };
