@@ -6,15 +6,24 @@ import SeanceSelector from './SeanceSelector';
 import { serverFunctions } from '../../utils/serverFunctions';
 
 const AddSeanceDialog = () => {
-  const submitNewMovie = async (newMovie) => {
+  const submitNewMovieHour = async (newMovie, newHour) => {
     try {
-      const response = await serverFunctions.addMovie(newMovie);
+      const response = await serverFunctions.addMovieHour(newMovie, newHour);
     } catch (error) {
       // eslint-disable-next-line no-alert
       alert(error);
     }
   };
 
+  const [movieList, setMovieList] = React.useState([]);
+
+  // Put it in Seance Selector
+  useEffect(() => {
+    var temp = getMovieList().then((arr) => setMovieList(arr))
+    console.log("movie list promise : ")
+    console.log(temp)
+  }, [])
+  
   return (
     <div style={{ padding: '3px', overflowX: 'hidden' }}>
       <Typography variant="h4" gutterBottom>
@@ -25,11 +34,24 @@ const AddSeanceDialog = () => {
         Ajoutez une séance à un film déjà enregistré
       </Typography>
       <SeanceSelector
-        movieList={['madmax', 'harry potter']}
-        submitNewMovie= {submitNewMovie}
+        movieList={movieList}
+        submitNewMovieHour = {submitNewMovieHour}
       />
     </div>
   );
 };
 
 export default AddSeanceDialog;
+
+async function getMovieList() {
+  try {
+    const response = (await serverFunctions.getMovies());
+    console.log("MovieList")
+    console.log(response)
+    return response;
+  } catch (error) {
+    // eslint-disable-next-line no-alert
+    alert(error);
+  }
+  return [];
+};

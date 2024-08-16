@@ -1,4 +1,5 @@
 const movieSheetName = "Movies"
+const movieHourSheetName = "MovieHour"
 
 const getSheets = () => SpreadsheetApp.getActive().getSheets();
 
@@ -32,6 +33,11 @@ export const setActiveSheet = (sheetName) => {
   return getSheetsData();
 };
 
+// Get All Movies
+export const getMovies = () => {
+  var movieSheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(movieSheetName);
+  return movieSheet.getRange("A:A").getValues().map((row) => row[0]).filter((value) => value !== '');
+}
 
 // Add Movie 
 export const addMovie = (movieName) => {
@@ -41,5 +47,22 @@ export const addMovie = (movieName) => {
 
 function appendToColumn(sheet, column, content) {
   var lastRow = sheet.getLastRow() + 1;
-  sheet.getRange(column + lastRow).setValue(content);
+  var positionAppended = column + lastRow 
+  sheet.getRange(positionAppended).setValue(content);
+  return positionAppended;
+}
+
+// Add Movie Hour
+export const addMovieHour = (movieName, movieHour) => {
+  var movieHourSheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(movieHourSheetName);
+  var position = appendToColumn(movieHourSheet, "A", movieName);
+  movieHourSheet.getRange(getNextColumn(position)).setValue(movieHour);
+
+  var ui = SpreadsheetApp.getUi();
+  ui.alert('Hello world');
+}
+
+function getNextColumn(currentCell) {
+  var currentColumnInInt = currentCell.charCodeAt(0);
+  return String.fromCharCode(currentColumnInInt + 1) + currentCell[1]; 
 }

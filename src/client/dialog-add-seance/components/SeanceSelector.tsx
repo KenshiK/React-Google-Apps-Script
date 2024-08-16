@@ -1,36 +1,34 @@
-import React, { FormEvent, useEffect } from 'react';
-import dayjs, { Dayjs } from 'dayjs';
-import 'dayjs/locale/fr';
+import React, { FormEvent } from 'react';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Button from '@mui/material/Button';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
-import DateTimePickerCustom from './DateTimePickerCustom'
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { DateCalendar } from '@mui/x-date-pickers/DateCalendar';
-import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
-import { TimePicker } from '@mui/x-date-pickers/TimePicker';
+import styled from '@emotion/styled'
 
-
-export default function SeanceSelector({ movieList, submitNewMovie  }: 
-  { movieList: Array<String>, submitNewMovie:Function  }) {
+export default function SeanceSelector({ movieList, submitNewMovieHour  }: 
+  { movieList: Array<String>, submitNewMovieHour:Function  }) {
   
-  const [dateValue, setDate] = React.useState<Dayjs | null>(dayjs());
-  const [time, setTime] = React.useState<Dayjs | null>(dayjs());
   const [movie, setMovie] = React.useState<String>('');
+  const [dateTime, setDateTime] = React.useState('');
 
   const handleChange = (event: SelectChangeEvent) => {
+    console.log(event.target);
+    console.log("movie from array :" + movieList[event.target.value]);
     setMovie(event.target.value as string);
+    // setMovie(movieList[event.target.value]);
   }; 
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if (dateValue == null) return;
+    if (dateTime == '') return;
     if (movie == '') return;
-    submitNewMovie(dateValue);
+    var movieName = movieList[+movie];
+    console.log("submitNewMovieHour movie :" + movieName + " hour : " + dateTime);
+    submitNewMovieHour(movieName, dateTime);
   };
+
+  // if(movieList == null || movieList as Array)
 
   return (
       <form
@@ -47,25 +45,18 @@ export default function SeanceSelector({ movieList, submitNewMovie  }:
           >
             {movieList.map((movie, index) => <MenuItem value={index}>{movie}</MenuItem>)}
           </Select>
+
+          <StyledInput type="datetime-local" value={dateTime} onChange={(ev) => setDateTime(ev.target.value)}/>
         </FormControl>
 
-        <LocalizationProvider dateAdapter={AdapterDayjs}>
-          <DateCalendar value={dateValue} onChange={(newDate) => setDate(newDate)}/>
-          <TimePicker
-            label="Controlled picker"
-            value={time}
-            onChange={(newTime) => setTime(newTime)}
-          />
-        </LocalizationProvider>
-            {/* <DateTimePickerCustom
-            // label="Basic date picker" 
-            // value={dateValue}
-            // onChange={(newValue) => setDate(newValue)}
-            /> */}
         <Button variant="contained" type="submit">
-            Submit
-          </Button>
+          Submit
+        </Button>
       </form>
   );
 }
 
+const StyledInput = styled("input")({
+  display: 'block',
+  marginTop : '20px',
+});
