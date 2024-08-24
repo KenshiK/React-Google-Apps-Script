@@ -71,6 +71,30 @@ const clientEntrypoints = [
     template: './src/client/dialog-add-seance/index.html',
   },
   {
+    name: 'CLIENT - Dialog Add Group',
+    entry: './src/client/dialog-add-group/index.js',
+    filename: 'dialog-add-group',
+    template: './src/client/dialog-add-group/index.html',
+  },
+  // {
+  //   name: 'CLIENT - Dialog Add School',
+  //   entry: './src/client/dialog-add-school/index.js',
+  //   filename: 'dialog-add-school',
+  //   template: './src/client/dialog-add-school/index.html',
+  // },
+  // {
+  //   name: 'CLIENT - Dialog Add Recreation Center',
+  //   entry: './src/client/dialog-add-center/index.js',
+  //   filename: 'dialog-add-center',
+  //   template: './src/client/dialog-add-center/index.html',
+  // },
+  // {
+  //   name: 'CLIENT - Dialog Add Reservation',
+  //   entry: './src/client/dialog-add-reservation/index.js',
+  //   filename: 'dialog-add-reservation',
+  //   template: './src/client/dialog-add-reservation/index.html',
+  // },
+  {
     name: 'CLIENT - Sidebar About Page',
     entry: './src/client/sidebar-about-page/index.js',
     filename: 'sidebar-about-page',

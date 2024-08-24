@@ -1,10 +1,9 @@
 export const onOpen = () => {
   const menu = SpreadsheetApp.getUi()
-    .createMenu('My Sample React Project') // edit me!
-    .addItem('Sheet Editor', 'openDialog')
-    .addItem('Sheet Editor (MUI)', 'openDialogMUI')
+    .createMenu('CineCalendar') // edit me!
     .addItem('Ajouter un film', 'openDialogMovie')
     .addItem('Ajouter une séance', 'openDialogSeance')
+    .addItem('Ajouter un nouveau groupe', 'openDialogGroup')
     .addItem('About me', 'openAboutSidebar');
 
   menu.addToUi();
@@ -43,3 +42,31 @@ export const openDialogSeance = () => {
     .setHeight(600);
   SpreadsheetApp.getUi().showModalDialog(html, 'Ajouter une nouvelle seance');
 };
+
+export const openDialogGroup = () => {
+  const html = HtmlService.createHtmlOutputFromFile('dialog-add-group')
+    .setWidth(600)
+    .setHeight(600);
+  SpreadsheetApp.getUi().showModalDialog(html, 'Ajouter un nouveau groupe');
+};
+
+// export const openDialogSchool = () => {
+//   const html = HtmlService.createHtmlOutputFromFile('dialog-add-school')
+//     .setWidth(600)
+//     .setHeight(600);
+//   SpreadsheetApp.getUi().showModalDialog(html, 'Ajouter une nouvelle école');
+// };
+
+// export const openDialogRecreation = () => {
+//   const html = HtmlService.createHtmlOutputFromFile('dialog-add-recreation')
+//     .setWidth(600)
+//     .setHeight(600);
+//   SpreadsheetApp.getUi().showModalDialog(html, 'Ajouter un nouveau centre de loisir');
+// };
+
+// export const openDialogReservation = () => {
+//   const html = HtmlService.createHtmlOutputFromFile('dialog-add-reservation')
+//     .setWidth(600)
+//     .setHeight(600);
+//   SpreadsheetApp.getUi().showModalDialog(html, 'Ajouter une nouvelle réservation');
+// };

@@ -10,14 +10,12 @@ const AddSeanceDialog = () => {
     try {
       const response = await serverFunctions.addMovieHour(newMovie, newHour);
     } catch (error) {
-      // eslint-disable-next-line no-alert
       alert(error);
     }
   };
 
   const [movieList, setMovieList] = React.useState([]);
 
-  // Put it in Seance Selector
   useEffect(() => {
     var temp = getMovieList().then((arr) => setMovieList(arr))
     console.log("movie list promise : ")
@@ -55,3 +53,4 @@ async function getMovieList() {
   }
   return [];
 };
+

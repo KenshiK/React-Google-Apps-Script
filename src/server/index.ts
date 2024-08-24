@@ -4,10 +4,22 @@ import {
   openDialogMUI,
   openDialogMovie,
   openDialogSeance,
+  openDialogGroup,
   openAboutSidebar,
 } from './ui';
 
-import { getSheetsData, addSheet, deleteSheet, setActiveSheet, addMovie, addMovieHour, getMovies } from './sheets';
+import { getSheetsData, 
+  addSheet, 
+  deleteSheet, 
+  setActiveSheet, 
+  addMovie, 
+  addMovieHour, 
+  getMovies,
+  getLevels,
+  addSchool,
+  addCenter,
+} from './sheets';
+
 
 // Public functions must be exported as named exports
 export {
@@ -16,6 +28,7 @@ export {
   openDialogMUI,
   openDialogMovie,
   openDialogSeance,
+  openDialogGroup,
   openAboutSidebar,
   getSheetsData,
   addSheet,
@@ -24,4 +37,7 @@ export {
   addMovie,
   addMovieHour,
   getMovies,
+  getLevels,
+  addSchool,
+  addCenter,
 };
