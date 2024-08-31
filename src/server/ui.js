@@ -4,6 +4,7 @@ export const onOpen = () => {
     .addItem('Ajouter un film', 'openDialogMovie')
     .addItem('Ajouter une séance', 'openDialogSeance')
     .addItem('Ajouter un nouveau groupe', 'openDialogGroup')
+    .addItem('Ajouter une réservation', 'openDialogReservation')
     .addItem('About me', 'openAboutSidebar');
 
   menu.addToUi();
@@ -41,7 +42,14 @@ export const openDialogSeance = () => {
     .setWidth(600)
     .setHeight(600);
   SpreadsheetApp.getUi().showModalDialog(html, 'Ajouter une nouvelle seance');
-};
+}
+
+export const openDialogReservation = () => {
+  const html = HtmlService.createHtmlOutputFromFile('dialog-add-reservation')
+    .setWidth(600)
+    .setHeight(600);
+  SpreadsheetApp.getUi().showModalDialog(html, 'Ajouter une nouvelle réservation');
+};;
 
 export const openDialogGroup = () => {
   const html = HtmlService.createHtmlOutputFromFile('dialog-add-group')

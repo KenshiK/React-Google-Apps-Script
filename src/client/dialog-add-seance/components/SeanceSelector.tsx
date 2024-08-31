@@ -28,8 +28,6 @@ export default function SeanceSelector({ movieList, submitNewMovieHour  }:
     submitNewMovieHour(movieName, dateTime);
   };
 
-  // if(movieList == null || movieList as Array)
-
   return (
       <form
         onSubmit={handleSubmit}

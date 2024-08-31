@@ -71,6 +71,12 @@ const clientEntrypoints = [
     template: './src/client/dialog-add-seance/index.html',
   },
   {
+    name: 'CLIENT - Dialog Add Reservation',
+    entry: './src/client/dialog-add-reservation/index.js',
+    filename: 'dialog-add-reservation',
+    template: './src/client/dialog-add-reservation/index.html',
+  },
+  {
     name: 'CLIENT - Dialog Add Group',
     entry: './src/client/dialog-add-group/index.js',
     filename: 'dialog-add-group',

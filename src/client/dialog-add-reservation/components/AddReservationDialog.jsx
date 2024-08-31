@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { Typography } from '@mui/material';
-import TextInput from './TextInput';
+import ReservationSelector from './ReservationSelector';
 
 // This is a wrapper for google.script.run that lets us use promises.
 import { serverFunctions } from '../../utils/serverFunctions';
@@ -19,17 +19,14 @@ const AddReservationDialog = () => {
   return (
     <div style={{ padding: '3px', overflowX: 'hidden' }}>
       <Typography variant="h4" gutterBottom>
-        Ajout de film
+        Nouvelle réservation
       </Typography>
 
       <Typography variant="body1" gutterBottom sx={{ marginBottom: '30px' }}>
-        Ajoutez un nouveau film à la liste des films diffusés
+        Ajoutez une nouvelle réservation
       </Typography>
-      <TextInput 
-        label="Votre film" 
-        caption=""
-        submitNewMovie={submitNewMovie} 
-        />
+      <ReservationSelector
+      />
     </div>
   );
 };

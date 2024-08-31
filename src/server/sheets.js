@@ -74,11 +74,46 @@ function appendDataToColumn(sheet, ...data) {
   sheet.getRange(startingCell + ":" + endingCell).setValues([data])
 }
 
+export const getSchools = () => {
+  return SpreadsheetApp
+  .getActiveSpreadsheet()
+  .getSheetByName(schoolSheetName)
+  .getDataRange()
+  .getDisplayValues()
+  .map(row => [row[0], row[8]])
+}
+
+// Get All Seances
+export const getSeances = () => {
+  return SpreadsheetApp
+  .getActiveSpreadsheet()
+  .getSheetByName(movieHourSheetName)
+  .getRange("A:B")
+  .getValues()
+  .filter((row) => row[0] !== '');
+}
+
+export const getSeancesOfMovie = (movieId) => {
+  // var ui = SpreadsheetApp.getUi();
+  // ui.alert('Id : ' + movieId);
+  return SpreadsheetApp
+  .getActiveSpreadsheet()
+  .getSheetByName(movieHourSheetName)
+  .getDataRange()
+  .getDisplayValues()
+  .filter(row => row[0] == movieId)
+  .map(row => row[1])
+}
 
 // Get All Movies
 export const getMovies = () => {
-  var movieSheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(movieSheetName);
-  return movieSheet.getRange("A:A").getValues().map((row) => row[0]).filter((value) => value !== '');
+  return SpreadsheetApp
+  .getActiveSpreadsheet()
+  .getSheetByName(movieSheetName)
+  .getRange("A:A")
+  .getValues()
+  .map((row) => row[0])
+  .filter((value) => value !== '');
 }
 
 // Add Movie 
@@ -129,7 +164,7 @@ function formatPhoneNumber(number) {
     if (number.length == 10) {
       var phonePart = [];
       for (var i = 0; i < number.length-1; i += 2) {
-        ui.alert("Number : " + number + " \n Length : " + number.length + " \n Index : " + i + " \n phonePart : " + phonePart)
+        // ui.alert("Number : " + number + " \n Length : " + number.length + " \n Index : " + i + " \n phonePart : " + phonePart)
         phonePart.push(number.substring(i, i + 2));
       }
       return phonePart.join(".");

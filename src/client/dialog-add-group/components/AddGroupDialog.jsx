@@ -126,7 +126,7 @@ const AddGroupDialog = () => {
           id="CenterContactNumber" 
           label="CenterContactNumber" 
           value={contactNumber}
-          onChange={setContactNumber}
+          onChange={(event) => setContactNumber(event.target.value)}
         >
           Contact Number
         </StyledTextField>
@@ -138,9 +138,13 @@ const AddGroupDialog = () => {
     switch(type)
     {
       case school:
-        return schoolInput();
+        {
+          return schoolInput();
+        }
       case recreationCenter:
-        return centerInput();
+        {
+          return centerInput();
+        }
       default:
         return (<></>);
     }
