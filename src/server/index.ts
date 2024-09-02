@@ -9,17 +9,24 @@ import {
   openAboutSidebar,
 } from './ui';
 
-import { getSheetsData, 
-  addSheet, 
-  deleteSheet, 
-  setActiveSheet, 
-  addMovie, 
-  addMovieHour, 
+import {
+  getSheetsData,
+  addSheet,
+  deleteSheet,
+  setActiveSheet,
+  addMovie,
+  addMovieHour,
   getMovies,
   getSeancesOfMovie,
   getLevels,
+  getOtherSubtypes,
+  getAllGroupsButSchools,
+  getSchools,
+  getSchoolClassesAssociated,
   addSchool,
   addCenter,
+  addDayCare,
+  addOther,
 } from './sheets';
 
 
@@ -42,6 +49,12 @@ export {
   getMovies,
   getSeancesOfMovie,
   getLevels,
+  getOtherSubtypes,
+  getAllGroupsButSchools,
+  getSchools,
+  getSchoolClassesAssociated,
   addSchool,
   addCenter,
+  addDayCare,
+  addOther,
 };

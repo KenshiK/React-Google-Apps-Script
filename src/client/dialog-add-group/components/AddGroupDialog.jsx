@@ -11,25 +11,46 @@ import MenuItem from '@mui/material/MenuItem';
 // This is a wrapper for google.script.run that lets us use promises.
 import { serverFunctions } from '../../utils/serverFunctions';
 
-const school = "École"
+const school = "Scolaire"
 const recreationCenter = "Centre de loisir"
+const daycare = "Creche"
+const other = "Autre"
 
 const AddGroupDialog = () => {
   const [type, setType] = React.useState('');
   const [name, setName] = React.useState('');
   const [level, setLevel] = React.useState('');
   const [levelList, setLevelList] = React.useState([]);
+  const [subtype, setSubtype] = React.useState('');
+  const [subtypeList, setSubtypeList] = React.useState([]);
   const [contact, setContact] = React.useState('');
   const [contactNumber, setContactNumber] = React.useState('');
+  const [adress, setAdress] = React.useState('');
+  const [postalCode, setPostalCode] = React.useState('');
+  const [city, setCity] = React.useState('');
   const [isRep, setIsRep] = React.useState(false);
 
-  const typeList = [school, recreationCenter]
+  const typeList = [school, recreationCenter, daycare, other]
 
   useEffect(() => {
-    var temp = getLevelList().then((arr) => setLevelList(arr))
-    console.log("level list promise : ")
-    console.log(temp)
-  }, [])
+    switch (type) {
+      case school:
+      case recreationCenter:
+        {
+          var temp = getLevelList().then((arr) => setLevelList(arr))
+          console.log("level list promise : ")
+          console.log(temp)
+          break;
+        }
+      case other:
+        {
+          var temp = getOtherSubtypeList().then((arr) => setSubtypeList(arr))
+          console.log("Subtype list promise : ")
+          console.log(temp)
+          break;
+        }
+    } 
+  }, [type])
   
   const updateType = (value) => {
     setType(typeList[value])
@@ -41,31 +62,79 @@ const AddGroupDialog = () => {
     setLevel(event.target.value);
   }; 
 
-  const schoolInput = () => {
+  const groupInput = (type) => {
+    if(type == null || type == '') return(<></>);
+
     return (
       <div>
         <StyledTextField 
-          id="SchoolName" 
-          label="SchoolName" 
+          id="Name" 
+          label="Name" 
           value={name}
           onChange={(event) => setName(event.target.value)}
         >
           Type
         </StyledTextField>
 
-        <StyledSelect
-          labelId="simple-select-label"
-          id="simple-select"
-          value={level}
-          label="level"
-          onChange={handleLevelSelectChange}
-        >
-          {levelList.map((level, index) => <MenuItem value={index}>{level}</MenuItem>)}
-        </StyledSelect>
+        {type == other ?
+          (
+            <StyledSelect
+              labelId="subtype-select"
+              id="subtype-select"
+              value={subtype}
+              label="subtype"
+              onChange={(event) => setSubtype(event.target.value)}
+            >
+              {subtypeList.map((subtype, index) => <MenuItem value={index}>{subtype}</MenuItem>)}
+            </StyledSelect>
+          ) : (<></>)
+        }
+
+
+        {type == school || type == recreationCenter ?
+          (
+            <StyledSelect
+              labelId="level-select"
+              id="level-select"
+              value={level}
+              label="level"
+              onChange={handleLevelSelectChange}
+            >
+              {levelList.map((level, index) => <MenuItem value={index}>{level}</MenuItem>)}
+            </StyledSelect>
+          ) : (<></>)
+        }
 
         <StyledTextField 
-          id="SchoolContact" 
-          label="SchoolContact" 
+          id="Adress" 
+          label="Adress" 
+          value={adress}
+          onChange={(event) => setAdress(event.target.value)}
+        >
+          Adress
+        </StyledTextField>
+
+        <StyledTextField 
+          id="PostalCode" 
+          label="PostalCode" 
+          value={postalCode}
+          onChange={(event) => setPostalCode(event.target.value)}
+        >
+          Postal Code
+        </StyledTextField>
+
+        <StyledTextField 
+          id="City" 
+          label="City" 
+          value={city}
+          onChange={(event) => setCity(event.target.value)}
+        >
+          City
+        </StyledTextField>
+
+        <StyledTextField 
+          id="Contact" 
+          label="Contact" 
           value={contact}
           onChange={(event) => setContact(event.target.value)}
         >
@@ -73,101 +142,57 @@ const AddGroupDialog = () => {
         </StyledTextField>
 
         <StyledTextField 
-          id="SchoolContactNumber" 
-          label="SchoolContactNumber" 
+          id="ContactNumber" 
+          label="ContactNumber" 
           value={contactNumber}
           onChange={(event) => setContactNumber(event.target.value)}
         >
           Contact Number
         </StyledTextField>
 
-        <Button 
-          id="SchoolIsRep" 
-          variant={isRep? "contained" : "outlined"}
-          onClick={() => {setIsRep(!isRep);}}
-        >
-          Ecole Prioritaire
-          <CheckIcon/>
-        </Button>
+        {type == school ? 
+        (
+          <Button
+            id="SchoolIsRep"
+            variant={isRep ? "contained" : "outlined"}
+            onClick={() => { setIsRep(!isRep); }}
+          >
+            REP
+            <CheckIcon />
+          </Button>
+        ) : (<></>)
+        }
       </div>
     )
-  }
-
-  const centerInput = () => {
-    return (
-      <div>
-        <StyledTextField 
-          id="CenterName" 
-          label="CenterName" 
-          value={name}
-          onChange={(event) => setName(event.target.value)}
-        >Type</StyledTextField>
-
-        <StyledSelect
-          labelId="simple-select-label"
-          id="simple-select"
-          value={level}
-          label="level"
-          onChange={handleLevelSelectChange}
-        >
-          {levelList.map((level, index) => <MenuItem value={index}>{level}</MenuItem>)}
-        </StyledSelect>
-
-        <StyledTextField 
-          id="CenterContact" 
-          label="CenterContact" 
-          value={contact}
-          onChange={(event) => setContact(event.target.value)}
-        >
-          Contact
-        </StyledTextField>
-
-        <StyledTextField 
-          id="CenterContactNumber" 
-          label="CenterContactNumber" 
-          value={contactNumber}
-          onChange={(event) => setContactNumber(event.target.value)}
-        >
-          Contact Number
-        </StyledTextField>
-      </div>
-    )
-  } 
-
-  function getInput(type) {
-    switch(type)
-    {
-      case school:
-        {
-          return schoolInput();
-        }
-      case recreationCenter:
-        {
-          return centerInput();
-        }
-      default:
-        return (<></>);
-    }
   }
 
   const handleSubmit = async (event) => {
       event.preventDefault();
 
-      var response;
-      console.log("School Added")
-      try {
-        if(type == school)
-          response = await serverFunctions.addSchool(name, level, contact, contactNumber, isRep);
-        else if(type == recreationCenter)
-          response = await serverFunctions.addCenter(name, level, contact, contactNumber);
-      } catch (error) {
-        alert(error);
-      }
-  };
-
-  const submitNewGroup = async (newMovie, newHour) => {
+    console.log("Added " + type)
     try {
-      const response = await serverFunctions.addMovieHour(newMovie, newHour);
+      switch (type) {
+        case school:
+          {
+            await serverFunctions.addSchool(name, level, adress, postalCode, city, contact, contactNumber, isRep);
+            break;
+          }
+        case recreationCenter:
+          {
+            await serverFunctions.addCenter(name, level, adress, postalCode, city, contact, contactNumber);
+            break;
+          }
+        case daycare:
+          {
+            await serverFunctions.addDayCare(name, adress, postalCode, city, contact, contactNumber);
+            break;
+          }
+        case other:
+          {
+            await serverFunctions.addOther(subtype, name, adress, postalCode, city, contact, contactNumber);
+            break;
+          }
+      }
     } catch (error) {
       alert(error);
     }
@@ -187,7 +212,7 @@ const AddGroupDialog = () => {
           onSubmit={handleSubmit}
       >
         <EtablishmentTypeSelector updateType={updateType} typeList={typeList}/>
-        {getInput(type)}
+        {groupInput(type)}
         <StyledButton variant="contained" type="submit">
         Submit
         </StyledButton>
@@ -216,6 +241,18 @@ async function getLevelList() {
   try {
     const response = (await serverFunctions.getLevels());
     console.log("LevelList")
+    console.log(response)
+    return response;
+  } catch (error) {
+    alert(error);
+  }
+  return [];
+};
+
+async function getOtherSubtypeList() {
+  try {
+    const response = (await serverFunctions.getOtherSubtypes());
+    console.log("Subtypes")
     console.log(response)
     return response;
   } catch (error) {

@@ -3,7 +3,7 @@ export const onOpen = () => {
     .createMenu('CineCalendar') // edit me!
     .addItem('Ajouter un film', 'openDialogMovie')
     .addItem('Ajouter une séance', 'openDialogSeance')
-    .addItem('Ajouter un nouveau groupe', 'openDialogGroup')
+    .addItem('Ajouter une nouvelle structure', 'openDialogGroup')
     .addItem('Ajouter une réservation', 'openDialogReservation')
     .addItem('About me', 'openAboutSidebar');
 
@@ -55,7 +55,7 @@ export const openDialogGroup = () => {
   const html = HtmlService.createHtmlOutputFromFile('dialog-add-group')
     .setWidth(600)
     .setHeight(600);
-  SpreadsheetApp.getUi().showModalDialog(html, 'Ajouter un nouveau groupe');
+  SpreadsheetApp.getUi().showModalDialog(html, 'Ajouter une nouvelle structure');
 };
 
 // export const openDialogSchool = () => {

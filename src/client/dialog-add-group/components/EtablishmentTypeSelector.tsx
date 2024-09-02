@@ -22,10 +22,10 @@ export default function EtablishmentTypeSelector({ updateType, typeList }:
             <FormControl fullWidth>
             <InputLabel id="demo-simple-select-label">Type</InputLabel>
             <Select
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
+                labelId="establishment-select"
+                id="establishment-select"
                 value={localType}
-                label="movie"
+                label="establishmentType"
                 onChange={updateLocalAndGlobal}
             >
                 {typeList.map((type, index) => <MenuItem value={index}>{type}</MenuItem>)}
