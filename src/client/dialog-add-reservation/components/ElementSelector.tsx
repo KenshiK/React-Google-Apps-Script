@@ -2,10 +2,11 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import React, { FormEvent, useEffect } from 'react';
+import ClassChip from './ClassChip';
 
 
-export default function ElementSelector({ title, elementList, updateVariable }:
-    { title: String, elementList: Array<String>, updateVariable: Function }) {
+export default function ElementSelector({ title, elementList, updateVariable, isChip = false}:
+    { title: string, elementList: Array<string>, updateVariable: Function, isChip?: boolean}) {
 
     const [element, setElement] = React.useState<String>('');
 

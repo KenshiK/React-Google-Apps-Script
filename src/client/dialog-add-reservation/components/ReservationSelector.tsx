@@ -60,11 +60,10 @@ export default function ReservationSelector() {
       :
       ElementSelectorDependent(structureTypes[structureId], "Group", Element.Group, setGroup, groupList, setGroupList)
       }
-      { structureId != null && structureTypes[structureId] == scolaire ?
+      <ClassChip classList={schoolClassList} updateClassListAnswer={setSchoolClass} display={structureId != null && structureTypes[structureId] == scolaire} />
+      {/* { //structureId != null && structureTypes[structureId] == scolaire ?
       ElementSelectorDependent(groupList[group], "Classe", Element.SchoolClass, setSchoolClass, schoolClassList, setSchoolClassList)
-      :
-      <></>
-      }
+      } */}
       <div>
         <Button variant="contained" type="submit">
           Submit
@@ -82,8 +81,8 @@ enum Element {
   SchoolClass
 }
 
-function ElementSelectorDependent (selectedValue : String, 
-  title: String, 
+function ElementSelectorDependent (selectedValue : string, 
+  title: string, 
   type: Element,
   elementUpdate: Function, 
   elementList: string[],
@@ -101,10 +100,10 @@ function ElementSelectorDependent (selectedValue : String,
   }, [selectedValue, elementListUpdate])
 
   return (
-    type != Element.SchoolClass ?
-    <ElementSelector title={title} elementList={elementList} updateVariable={elementUpdate} />
-    :
-    <ClassChip classList={elementList} updateClassListAnswer={elementUpdate}/>
+    //type != Element.SchoolClass ?
+    <ElementSelector title={title} elementList={elementList} updateVariable={elementUpdate} isChip={type == Element.SchoolClass}/>
+    //:
+    //<ClassChip classList={elementList} updateClassListAnswer={elementUpdate}/>
   )
 }
 

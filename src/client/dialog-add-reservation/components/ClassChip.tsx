@@ -14,8 +14,8 @@ const MenuProps = {
     },
 };
 
-export default function ClassChip({classList, updateClassListAnswer} : 
-    {classList:string[], updateClassListAnswer: Function}) {
+export default function ClassChip({classList, updateClassListAnswer, display} : 
+    {classList:string[], updateClassListAnswer: Function, display: boolean}) {
 
     // const theme = useTheme();
     // const [classes, setClasses] = React.useState<string[]>([]);
