@@ -6,14 +6,20 @@ import ReservationSelector from './ReservationSelector';
 import { serverFunctions } from '../../utils/serverFunctions';
 
 const AddReservationDialog = () => {
-  const submitNewMovie = async (newMovie) => {
+  function submitReservation(movie,
+    seance,
+    structureType,
+    structureName,
+    nbrParticipants,
+    nbrExos,
+    klass) {
     try {
-      const response = await serverFunctions.addMovie(newMovie);
+      const response = serverFunctions.addReservation(movie, seance, structureType, structureName, nbrParticipants, nbrExos, klass);
     } catch (error) {
       // eslint-disable-next-line no-alert
       alert(error);
     }
-  };
+  }
 
 
   return (
@@ -25,10 +31,25 @@ const AddReservationDialog = () => {
       <Typography variant="body1" gutterBottom sx={{ marginBottom: '30px' }}>
         Ajoutez une nouvelle réservation
       </Typography>
-      <ReservationSelector
+      <ReservationSelector submitReservation={submitReservation}
       />
     </div>
   );
 };
 
 export default AddReservationDialog;
+
+export function submitReservationEx(movie,
+    seance,
+    structureType,
+    structureName,
+    nbrParticipants,
+    nbrExos,
+    klass) {
+    try {
+      const response = serverFunctions.addReservation(movie, seance, structureType, structureName, nbrParticipants, nbrExos, klass);
+    } catch (error) {
+      // eslint-disable-next-line no-alert
+      alert(error);
+    }
+  }

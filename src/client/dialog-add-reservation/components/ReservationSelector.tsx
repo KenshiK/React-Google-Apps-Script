@@ -5,9 +5,11 @@ import ElementSelector from './ElementSelector';
 // This is a wrapper for google.script.run that lets us use promises.
 import { serverFunctions } from '../../utils/serverFunctions';
 import ClassChip from './ClassChip';
+import { TextField } from '@mui/material';
+import {submitReservationEx} from './AddReservationDialog'
 
 
-export default function ReservationSelector() {
+export default function ReservationSelector( submitReservation : Function) {
   var [movie, setMovie] = React.useState<number>();
   var [movieList, setMovieList] = React.useState<string[]>([]);
   var [seance, setSeance] = React.useState<number>();
@@ -17,18 +19,40 @@ export default function ReservationSelector() {
   var [schoolClassAnswer, setSchoolClassAnswer] = React.useState<number>(null);
   var [schoolClassList, setSchoolClassList] = React.useState<string[]>([]);
   var [structureId, setStructureId] = React.useState<number>(null);
-  var [dateTime, setDateTime] = React.useState<String>('');
+  var [nbrParticipants, setParticipants] = React.useState<number>(0);
+  var [nbrExos, setExos] = React.useState<number>(0);
 
-  const scolaire : string = "Scolaires";
-  const nonScolaire : string = "Non-Scolaires";
+  const scolaire: string = "Scolaires";
+  const nonScolaire: string = "Non-Scolaires";
   const structureTypes = [scolaire, nonScolaire]
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if (dateTime == '') return;
-    if (movie == null) return;
-    if (seance == null) return;
-    if (group == null) return;
+
+    console.log("Submit")
+    console.log({
+      movie: movieList[movie],
+      seance: seanceList[seance],
+      strucType: structureTypes[structureId],
+      strucName: groupList[group],
+      participants: nbrParticipants,
+      exos: nbrExos,
+      klass: schoolClassAnswer
+    })
+    console.log(submitReservation)
+
+    // if (
+    //   movie == null ||
+    //   seance == null ||
+    //   group == null) return;
+
+    submitReservationEx(movieList[movie], 
+      seanceList[seance], 
+      structureTypes[structureId], 
+      groupList[group], 
+      nbrParticipants, 
+      nbrExos, 
+      schoolClassAnswer)
     // var movieName = movieList[+movie];
     // console.log("submitNewMovieHour movie :" + movieName + " hour : " + dateTime);
     // submitNewMovieHour(movieName, dateTime);
@@ -57,12 +81,43 @@ export default function ReservationSelector() {
       <ElementSelector title="Movie" elementList={movieList} updateVariable={setMovieAndUpdateData} />
       {ElementSelectorDependent(movieList[movie], "Seance", Element.Seance, setSeance, seanceList, setSeanceList)}
       <ElementSelector title="Type de structure" elementList={structureTypes} updateVariable={setStructureTypeAndUpdateData} />
-      { structureId != null && structureTypes[structureId] == scolaire ?
-      ElementSelectorDependent(structureTypes[structureId], "Scolaire", Element.School, setGroup, groupList, setGroupList)
-      :
-      ElementSelectorDependent(structureTypes[structureId], "Group", Element.Group, setGroup, groupList, setGroupList)
+      {structureId != null && structureTypes[structureId] == scolaire ?
+        ElementSelectorDependent(structureTypes[structureId], "Scolaire", Element.School, setGroup, groupList, setGroupList)
+        :
+        ElementSelectorDependent(structureTypes[structureId], "Group", Element.Group, setGroup, groupList, setGroupList)
       }
       {ClassChipElement(groupList[group], setSchoolClassAnswer, schoolClassList, setSchoolClassList, isSchool)}
+      <TextField
+        id="Participants-input"
+        label="Participants"
+        variant="outlined"
+        placeholder="Type a number…"
+        value={nbrParticipants}
+        onChange={(event) => {
+          var value = parseInt(event.target.value)
+          value = isNaN(value) ? 0 : value;
+          return setParticipants(value);
+        }}
+        name="Participants number"
+        fullWidth
+        size="small"
+      />
+
+      <TextField
+        id="Exos-input"
+        label="Exos"
+        variant="outlined"
+        placeholder="Type a number…"
+        value={nbrExos}
+        onChange={(event) => {
+          var value = parseInt(event.target.value)
+          value = isNaN(value) ? 0 : value;
+          return setExos(value);
+        }}
+        name="Exos number"
+        fullWidth
+        size="small"
+      />
       <div>
         <Button variant="contained" type="submit">
           Submit

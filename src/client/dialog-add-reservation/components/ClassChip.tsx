@@ -24,21 +24,16 @@ export default function ClassChip({classList, updateClassListAnswer, display} :
         display: display? 'block' : 'none',
     });
 
-
     // const handleChange = (event: SelectChangeEvent<typeof classes>) => {
     function handleChange(event: SelectChangeEvent<typeof classes>) {
-        // const {
-        //     target: { value },
-        // } = event;
 
-        console.log("selected value : " + event.target.value)
-        var value = event.target.value;
-        setClasses(
-            // On autofill we get a stringified value.
-            typeof value === 'string' ? value.split(',') : value,
-        );
+        const value = event.target.value;
+        console.log("selected value : " + value)
 
-        updateClassListAnswer(classes);
+        // On autofill we get a stringified value.
+        const final = typeof value === 'string' ? value.split(',') : value
+        setClasses(final);
+        updateClassListAnswer( typeof value === 'string' ? value.split(',') : value,);
     };
 
     return (

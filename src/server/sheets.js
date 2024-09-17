@@ -195,6 +195,11 @@ export const addMovieHour = (movieName, movieHour) => {
   // ui.alert('Hello world');
 }
 
+export const addReservation = (movie, seance, structureType, structureName, nbrParticipants, nbrExos, klass = "") => {
+  var reservationSheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(movieSheetName);
+  appendDataToColumn(reservationSheet, movie, seance, structureType, structureName, nbrParticipants, nbrExos, klass);
+}
+
 // Utilitaires
 function getNextColumn(currentCell) {
   var currentColumnInInt = currentCell.charCodeAt(0);

@@ -27,6 +27,7 @@ import {
   addCenter,
   addDayCare,
   addOther,
+  addReservation,
 } from './sheets';
 
 
@@ -57,4 +58,5 @@ export {
   addCenter,
   addDayCare,
   addOther,
+  addReservation,
 };
