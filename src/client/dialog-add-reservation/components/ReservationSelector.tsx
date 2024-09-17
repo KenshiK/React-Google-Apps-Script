@@ -14,7 +14,7 @@ export default function ReservationSelector() {
   var [seanceList, setSeanceList] = React.useState<string[]>([]);
   var [group, setGroup] = React.useState<number>();
   var [groupList, setGroupList] = React.useState<string[]>([]);
-  var [schoolClass, setSchoolClass] = React.useState<number>(null);
+  var [schoolClassAnswer, setSchoolClassAnswer] = React.useState<number>(null);
   var [schoolClassList, setSchoolClassList] = React.useState<string[]>([]);
   var [structureId, setStructureId] = React.useState<number>(null);
   var [dateTime, setDateTime] = React.useState<String>('');
@@ -48,6 +48,8 @@ export default function ReservationSelector() {
     setStructureId(structureId);
   }
 
+  var isSchool: boolean = structureId != null && structureTypes[structureId] == scolaire;
+
   return (
     <form
       onSubmit={handleSubmit}
@@ -60,10 +62,7 @@ export default function ReservationSelector() {
       :
       ElementSelectorDependent(structureTypes[structureId], "Group", Element.Group, setGroup, groupList, setGroupList)
       }
-      <ClassChip classList={schoolClassList} updateClassListAnswer={setSchoolClass} display={structureId != null && structureTypes[structureId] == scolaire} />
-      {/* { //structureId != null && structureTypes[structureId] == scolaire ?
-      ElementSelectorDependent(groupList[group], "Classe", Element.SchoolClass, setSchoolClass, schoolClassList, setSchoolClassList)
-      } */}
+      {ClassChipElement(groupList[group], setSchoolClassAnswer, schoolClassList, setSchoolClassList, isSchool)}
       <div>
         <Button variant="contained" type="submit">
           Submit
@@ -81,12 +80,13 @@ enum Element {
   SchoolClass
 }
 
-function ElementSelectorDependent (selectedValue : string, 
+function ElementSelectorDependent (selectedValue : String, 
   title: string, 
   type: Element,
   elementUpdate: Function, 
   elementList: string[],
-  elementListUpdate: Function) {
+  elementListUpdate: Function
+  ) {
   // var [seanceList, setSeanceList] = React.useState<Array<String>>([]);
   // var [seance, setSeance] = React.useState<number>();
 
@@ -100,11 +100,36 @@ function ElementSelectorDependent (selectedValue : string,
   }, [selectedValue, elementListUpdate])
 
   return (
-    //type != Element.SchoolClass ?
-    <ElementSelector title={title} elementList={elementList} updateVariable={elementUpdate} isChip={type == Element.SchoolClass}/>
-    //:
-    //<ClassChip classList={elementList} updateClassListAnswer={elementUpdate}/>
+    <ElementSelector title={title} elementList={elementList} updateVariable={elementUpdate} />
   )
+}
+
+function ClassChipElement (selectedValue : String, 
+  elementUpdate: Function, 
+  elementList: string[],
+  elementListUpdate: Function,
+  display: boolean = false) {
+
+  useEffect(() => {
+    if(display == true)
+      getClasses(selectedValue).then((arr) => elementListUpdate(arr));
+  }, [selectedValue, elementListUpdate])
+
+  console.log("Display school ? " + display)
+  return (
+    <ClassChip classList={elementList} updateClassListAnswer={elementUpdate} display={display} />
+  )
+}
+
+async function getClasses(dependency: String) {
+  try {
+    var response = (await serverFunctions.getSchoolClassesAssociated(dependency));
+    console.log("Schools");
+    console.log(response);
+    return response;
+  } catch (error) {
+    alert(error);
+  }
 }
 
 async function getElementList(elem: Element, dependency: String) {
@@ -125,13 +150,13 @@ async function getElementList(elem: Element, dependency: String) {
           console.log(response);
           break;
         }
-      case Element.SchoolClass:
-        {
-          response = (await serverFunctions.getSchoolClassesAssociated(dependency));
-          console.log("Schools");
-          console.log(response);
-          break;
-        }
+      // case Element.SchoolClass:
+      //   {
+      //     response = (await serverFunctions.getSchoolClassesAssociated(dependency));
+      //     console.log("Schools");
+      //     console.log(response);
+      //     break;
+      //   }
       case Element.Group:
         {
           response = (await serverFunctions.getAllGroupsButSchools());

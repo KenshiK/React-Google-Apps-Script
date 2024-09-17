@@ -38,7 +38,7 @@ export const getSchools = () => {
 }
 
 export const getSchoolClassesAssociated = (schoolName) => {
-  var level = SpreadsheetApp
+  var levelString = SpreadsheetApp
   .getActiveSpreadsheet()
   .getSheetByName(schoolSheetName)
   .getDataRange()
@@ -47,17 +47,22 @@ export const getSchoolClassesAssociated = (schoolName) => {
   .flat()
   .at(7)
 
-  var ui = SpreadsheetApp.getUi();
-  ui.alert('Value of level: ' + level);
+  var level = parseInt(levelString)
   
   var column = getNextLetter('A', level);
+  var columnCode = column + ":" + column;
+
+  var ui = SpreadsheetApp.getUi();
+  ui.alert('Value of level: ' + level + '\n ColumnCode : ' + columnCode );
+
   var classList = SpreadsheetApp
   .getActiveSpreadsheet()
   .getSheetByName(enumSheetName)
-  .getRange(column + ":" + column)
+  .getRange(columnCode)
   .getDisplayValues()
   .filter(row => row[0] != '')
   .slice(1)
+  .flat()
 
   return classList;
 

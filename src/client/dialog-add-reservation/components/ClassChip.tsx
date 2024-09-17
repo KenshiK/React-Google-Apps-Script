@@ -1,4 +1,4 @@
-import { InputLabel, Select, OutlinedInput, Box, Chip, MenuItem, SelectChangeEvent } from '@mui/material';
+import { InputLabel, Select, OutlinedInput, Chip, MenuItem, SelectChangeEvent, styled, Box } from '@mui/material';
 import React, { FormEvent, useEffect } from 'react';
 import { FormControl } from 'react-bootstrap';
 import { Theme, useTheme } from '@mui/material/styles';
@@ -18,26 +18,31 @@ export default function ClassChip({classList, updateClassListAnswer, display} :
     {classList:string[], updateClassListAnswer: Function, display: boolean}) {
 
     // const theme = useTheme();
-    // const [classes, setClasses] = React.useState<string[]>([]);
+    const [classes, setClasses] = React.useState<string[]>([]);
 
-    var classes: string[];
+    const StyledSpan = styled(Box)({
+        display: display? 'block' : 'none',
+    });
 
-    const handleChange = (event: SelectChangeEvent<typeof classes>) => {
-        const {
-            target: { value },
-        } = event;
-        // setClasses(
-        //     // On autofill we get a stringified value.
-        //     typeof value === 'string' ? value.split(',') : value,
-        // );
 
-        // On autofill we get a stringified value.
-        classes = typeof value === 'string' ? value.split(',') : value;
+    // const handleChange = (event: SelectChangeEvent<typeof classes>) => {
+    function handleChange(event: SelectChangeEvent<typeof classes>) {
+        // const {
+        //     target: { value },
+        // } = event;
+
+        console.log("selected value : " + event.target.value)
+        var value = event.target.value;
+        setClasses(
+            // On autofill we get a stringified value.
+            typeof value === 'string' ? value.split(',') : value,
+        );
+
         updateClassListAnswer(classes);
     };
 
     return (
-        <>
+        <StyledSpan>
             <InputLabel id="class-chip-Inputlabel-id">Class</InputLabel>
             <Select
                 labelId="clas-chip-select-label"
@@ -55,9 +60,9 @@ export default function ClassChip({classList, updateClassListAnswer, display} :
                 )}
                 MenuProps={MenuProps}
             >
-                {classList.map((klass) => (
+                {classList.map((klass, index) => (
                     <MenuItem
-                        key={klass}
+                        key={index}
                         value={klass}
                         // style={getStyles(klass, classes, theme)}
                     >
@@ -65,15 +70,6 @@ export default function ClassChip({classList, updateClassListAnswer, display} :
                     </MenuItem>
                 ))}
             </Select>
-        </>
+        </StyledSpan>
     );
 }
-
-// function getStyles(name: string, personName: readonly string[], theme: Theme) {
-//     return {
-//         fontWeight:
-//             personName.indexOf(name) === -1
-//                 ? theme.typography.fontWeightRegular
-//                 : theme.typography.fontWeightMedium,
-//     };
-// }
