@@ -195,9 +195,9 @@ export const addMovieHour = (movieName, movieHour) => {
   // ui.alert('Hello world');
 }
 
-export const addReservation = (movie, seance, structureType, structureName, nbrParticipants, nbrExos, klass = "") => {
-  var reservationSheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(movieSheetName);
-  appendDataToColumn(reservationSheet, movie, seance, structureType, structureName, nbrParticipants, nbrExos, klass);
+export const addReservation = (movie, seance, structureType, structureName, nbrParticipants, nbrExos, klass = []) => {
+  var reservationSheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(reservationSheetName);
+  appendDataToColumn(reservationSheet, movie, seance, structureType, structureName, nbrParticipants, nbrExos, klass.toString());
 }
 
 // Utilitaires
@@ -230,8 +230,8 @@ function appendDataToColumn(sheet, ...data) {
   const startingCell = startingColumn + lastRow;
   const endingCell = endColumn + lastRow;
 
-  // var ui = SpreadsheetApp.getUi();
-  // ui.alert(startingCell + ":" + endingCell + " \n data length : " + data.length + " \n data content : " + data);
+  var ui = SpreadsheetApp.getUi();
+  ui.alert(startingCell + ":" + endingCell + " \n data length : " + data.length + " \n data content : " + data);
 
   sheet.getRange(startingCell + ":" + endingCell).setValues([data])
 }

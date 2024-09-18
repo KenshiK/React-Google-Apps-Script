@@ -6,22 +6,6 @@ import ReservationSelector from './ReservationSelector';
 import { serverFunctions } from '../../utils/serverFunctions';
 
 const AddReservationDialog = () => {
-  function submitReservation(movie,
-    seance,
-    structureType,
-    structureName,
-    nbrParticipants,
-    nbrExos,
-    klass) {
-    try {
-      const response = serverFunctions.addReservation(movie, seance, structureType, structureName, nbrParticipants, nbrExos, klass);
-    } catch (error) {
-      // eslint-disable-next-line no-alert
-      alert(error);
-    }
-  }
-
-
   return (
     <div style={{ padding: '3px', overflowX: 'hidden' }}>
       <Typography variant="h4" gutterBottom>
@@ -31,8 +15,7 @@ const AddReservationDialog = () => {
       <Typography variant="body1" gutterBottom sx={{ marginBottom: '30px' }}>
         Ajoutez une nouvelle réservation
       </Typography>
-      <ReservationSelector submitReservation={submitReservation}
-      />
+      <ReservationSelector/>
     </div>
   );
 };
@@ -47,6 +30,7 @@ export function submitReservationEx(movie,
     nbrExos,
     klass) {
     try {
+      console.log("call to backend add reservation");
       const response = serverFunctions.addReservation(movie, seance, structureType, structureName, nbrParticipants, nbrExos, klass);
     } catch (error) {
       // eslint-disable-next-line no-alert

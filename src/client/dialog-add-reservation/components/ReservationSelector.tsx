@@ -9,7 +9,7 @@ import { TextField } from '@mui/material';
 import {submitReservationEx} from './AddReservationDialog'
 
 
-export default function ReservationSelector( submitReservation : Function) {
+export default function ReservationSelector() {
   var [movie, setMovie] = React.useState<number>();
   var [movieList, setMovieList] = React.useState<string[]>([]);
   var [seance, setSeance] = React.useState<number>();
@@ -39,7 +39,6 @@ export default function ReservationSelector( submitReservation : Function) {
       exos: nbrExos,
       klass: schoolClassAnswer
     })
-    console.log(submitReservation)
 
     // if (
     //   movie == null ||
