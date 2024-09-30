@@ -5,6 +5,7 @@ import {
   openDialogMovie,
   openDialogSeance,
   openDialogReservation,
+  openDialogSave,
   openDialogGroup,
   openAboutSidebar,
 } from './ui';
@@ -39,6 +40,7 @@ export {
   openDialogMovie,
   openDialogSeance,
   openDialogReservation,
+  openDialogSave,
   openDialogGroup,
   openAboutSidebar,
   getSheetsData,

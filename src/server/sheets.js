@@ -196,8 +196,19 @@ export const addMovieHour = (movieName, movieHour) => {
 }
 
 export const addReservation = (movie, seance, structureType, structureName, nbrParticipants, nbrExos, klass = []) => {
+  var ui = SpreadsheetApp.getUi();
+  ui.alert("test ui");
+
+  var calendar = CalendarApp.getDefaultCalendar();
+  var seanceDate = Date.parse(seance);
+  ui.alert("Seance date après Parse : " + seanceDate.toString());
+
   var reservationSheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(reservationSheetName);
   appendDataToColumn(reservationSheet, movie, seance, structureType, structureName, nbrParticipants, nbrExos, klass.toString());
+
+  calendar.createEvent("Séance pour le film '" + movie + "'", 
+  seanceDate, 
+  Date.prototype.addHours(seanceDate, 2) )
 }
 
 // Utilitaires
@@ -230,8 +241,6 @@ function appendDataToColumn(sheet, ...data) {
   const startingCell = startingColumn + lastRow;
   const endingCell = endColumn + lastRow;
 
-  var ui = SpreadsheetApp.getUi();
-  ui.alert(startingCell + ":" + endingCell + " \n data length : " + data.length + " \n data content : " + data);
 
   sheet.getRange(startingCell + ":" + endingCell).setValues([data])
 }
@@ -257,6 +266,11 @@ function formatPhoneNumber(number) {
   }
 
   return number;
+}
+
+Date.prototype.addHours = function(h) {
+  this.setTime(this.getTime() + (h*60*60*1000));
+  return this;
 }
 
 

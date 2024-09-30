@@ -49,7 +49,7 @@ export const openDialogReservation = () => {
     .setWidth(600)
     .setHeight(600);
   SpreadsheetApp.getUi().showModalDialog(html, 'Ajouter une nouvelle réservation');
-};;
+};
 
 export const openDialogGroup = () => {
   const html = HtmlService.createHtmlOutputFromFile('dialog-add-group')
@@ -58,23 +58,9 @@ export const openDialogGroup = () => {
   SpreadsheetApp.getUi().showModalDialog(html, 'Ajouter une nouvelle structure');
 };
 
-// export const openDialogSchool = () => {
-//   const html = HtmlService.createHtmlOutputFromFile('dialog-add-school')
-//     .setWidth(600)
-//     .setHeight(600);
-//   SpreadsheetApp.getUi().showModalDialog(html, 'Ajouter une nouvelle école');
-// };
-
-// export const openDialogRecreation = () => {
-//   const html = HtmlService.createHtmlOutputFromFile('dialog-add-recreation')
-//     .setWidth(600)
-//     .setHeight(600);
-//   SpreadsheetApp.getUi().showModalDialog(html, 'Ajouter un nouveau centre de loisir');
-// };
-
-// export const openDialogReservation = () => {
-//   const html = HtmlService.createHtmlOutputFromFile('dialog-add-reservation')
-//     .setWidth(600)
-//     .setHeight(600);
-//   SpreadsheetApp.getUi().showModalDialog(html, 'Ajouter une nouvelle réservation');
-// };
+export const openDialogSave = () => {
+  const html = HtmlService.createHtmlOutputFromFile('dialog-save')
+    .setWidth(600)
+    .setHeight(600);
+  SpreadsheetApp.getUi().showModalDialog(html, 'SaveFile');
+};
