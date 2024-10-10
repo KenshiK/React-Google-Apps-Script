@@ -7,6 +7,8 @@ import { serverFunctions } from '../../utils/serverFunctions';
 import ClassChip from './ClassChip';
 import { TextField } from '@mui/material';
 import {submitReservationEx} from './AddReservationDialog'
+import * as model from '../../utils/model'
+import { levelToClasses } from '../../utils/helper';
 
 
 export default function ReservationSelector() {
@@ -15,12 +17,31 @@ export default function ReservationSelector() {
   var [seance, setSeance] = React.useState<number>();
   var [seanceList, setSeanceList] = React.useState<string[]>([]);
   var [group, setGroup] = React.useState<number>();
-  var [groupList, setGroupList] = React.useState<string[]>([]);
+  var [groupList, setGroupList] = React.useState<model.Structure[]>([]);
   var [schoolClassAnswer, setSchoolClassAnswer] = React.useState<number>(null);
   var [schoolClassList, setSchoolClassList] = React.useState<string[]>([]);
   var [structureId, setStructureId] = React.useState<number>(null);
   var [nbrParticipants, setParticipants] = React.useState<number>(0);
   var [nbrExos, setExos] = React.useState<number>(0);
+
+
+  function setGroupAndUpdateClassList(groupId:number)
+  {
+    setGroup(groupId);
+    console.log("GroupId")
+    console.log(groupId)
+    console.log("GroupList")
+    console.log(groupList)
+    console.log("Group")
+    console.log(group)
+    console.log("selection")
+    console.log(groupList[groupId])
+
+    var classList = levelToClasses(Number((groupList[groupId] as model.RecreationCenter).level))
+    console.log("classList dans le set")
+    console.log(classList)
+    setSchoolClassList(classList)
+  }
 
   const scolaire: string = "Scolaires";
   const nonScolaire: string = "Non-Scolaires";
@@ -40,10 +61,6 @@ export default function ReservationSelector() {
       klass: schoolClassAnswer
     })
 
-    // if (
-    //   movie == null ||
-    //   seance == null ||
-    //   group == null) return;
 
     submitReservationEx(movieList[movie], 
       seanceList[seance], 
@@ -52,9 +69,6 @@ export default function ReservationSelector() {
       nbrParticipants, 
       nbrExos, 
       schoolClassAnswer)
-    // var movieName = movieList[+movie];
-    // console.log("submitNewMovieHour movie :" + movieName + " hour : " + dateTime);
-    // submitNewMovieHour(movieName, dateTime);
   };
 
   useEffect(() => {
@@ -81,11 +95,20 @@ export default function ReservationSelector() {
       {ElementSelectorDependent(movieList[movie], "Seance", Element.Seance, setSeance, seanceList, setSeanceList)}
       <ElementSelector title="Type de structure" elementList={structureTypes} updateVariable={setStructureTypeAndUpdateData} />
       {structureId != null && structureTypes[structureId] == scolaire ?
-        ElementSelectorDependent(structureTypes[structureId], "Scolaire", Element.School, setGroup, groupList, setGroupList)
+        ElementSelectorDependent(structureTypes[structureId], "Scolaire", Element.School, /*setGroup*/setGroupAndUpdateClassList, groupList.map(g => g.name), setGroupList)
         :
-        ElementSelectorDependent(structureTypes[structureId], "Group", Element.Group, setGroup, groupList, setGroupList)
+        ElementSelectorDependent(structureTypes[structureId], "Group", Element.Group, /*setGroup*/setGroupAndUpdateClassList, groupList.map(g => g.name), setGroupList)
       }
-      {ClassChipElement(groupList[group], setSchoolClassAnswer, schoolClassList, setSchoolClassList, isSchool)}
+      {/* {
+      ClassChipElement(
+      groupList[group], 
+      setSchoolClassAnswer,
+      schoolClassList, 
+      setSchoolClassList, 
+      isSchool)} */}
+      <ClassChip classList={schoolClassList} 
+      updateClassListAnswer={setSchoolClassAnswer} 
+      display={isSchool} />
       <TextField
         id="Participants-input"
         label="Participants"
@@ -134,20 +157,13 @@ enum Element {
   SchoolClass
 }
 
-function ElementSelectorDependent (selectedValue : String, 
+function ElementSelectorDependent (selectedValue : string, 
   title: string, 
   type: Element,
   elementUpdate: Function, 
   elementList: string[],
   elementListUpdate: Function
   ) {
-  // var [seanceList, setSeanceList] = React.useState<Array<String>>([]);
-  // var [seance, setSeance] = React.useState<number>();
-
-
-  // useEffect(() => {
-  //   var tempSeance = getElementList(Element.Seance, selectedValue).then((arr) => setSeanceList(arr));
-  // }, [selectedValue, setSeanceList])
 
   useEffect(() => {
     getElementList(type, selectedValue).then((arr) => elementListUpdate(arr));
@@ -158,26 +174,49 @@ function ElementSelectorDependent (selectedValue : String,
   )
 }
 
-function ClassChipElement (selectedValue : String, 
+function ClassChipElement (selectedValue : model.Structure,
   elementUpdate: Function, 
   elementList: string[],
   elementListUpdate: Function,
   display: boolean = false) {
 
+    console.log('Display : ' + display)
+    console.log(selectedValue)
+    console.log('C\'est une school ? ' + (selectedValue instanceof model.School))
+
+  // if (display == true && selectedValue instanceof model.School)
+  // {
+  //   console.log("dans le if");
+  //   elementListUpdate(
+  //     levelToClasses(
+  //       (selectedValue as model.RecreationCenter).level
+  //     ))
+  // }
+
   useEffect(() => {
-    if(display == true)
-      getClasses(selectedValue).then((arr) => elementListUpdate(arr));
+    if (display == true) {
+      console.log("dans le if");
+      elementListUpdate(
+        levelToClasses(
+          (selectedValue as model.RecreationCenter).level
+        ))
+    }
+    // if(display == true)
+    // getClasses(selectedValue).then((arr) => elementListUpdate(arr));
   }, [selectedValue, elementListUpdate])
 
   console.log("Display school ? " + display)
+  console.log("elementList")
+  console.log(elementList)
   return (
     <ClassChip classList={elementList} updateClassListAnswer={elementUpdate} display={display} />
   )
 }
 
-async function getClasses(dependency: String) {
+async function getClasses(structure: model.RecreationCenter | model.School) {
+  structure.level
   try {
-    var response = (await serverFunctions.getSchoolClassesAssociated(dependency));
+    var response = (await serverFunctions.getSchoolClassesAssociated(structure.name));
     console.log("Schools");
     console.log(response);
     return response;
@@ -204,13 +243,6 @@ async function getElementList(elem: Element, dependency: String) {
           console.log(response);
           break;
         }
-      // case Element.SchoolClass:
-      //   {
-      //     response = (await serverFunctions.getSchoolClassesAssociated(dependency));
-      //     console.log("Schools");
-      //     console.log(response);
-      //     break;
-      //   }
       case Element.Group:
         {
           response = (await serverFunctions.getAllGroupsButSchools());

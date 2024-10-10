@@ -36,6 +36,9 @@ export default function ClassChip({classList, updateClassListAnswer, display} :
         updateClassListAnswer( typeof value === 'string' ? value.split(',') : value,);
     };
 
+    console.log("classList")
+    console.log(classList)
+
     return (
         <StyledSpan>
             <InputLabel id="class-chip-Inputlabel-id">Class</InputLabel>

@@ -1,3 +1,11 @@
+import { HelpOutlineRounded, School } from '@mui/icons-material';
+import {
+  createEvent,
+  addReservationToSeance
+} from './helper';
+import * as model from './model';
+import { levelToClasses } from '../client/utils/helper';
+
 const movieSheetName = "Movies"
 const movieHourSheetName = "MovieHour"
 const groupSheetName = "Groups"
@@ -9,23 +17,9 @@ const reservationSheetName = "Reservations"
 const enumSheetName = "Enum"
 
 // Getters 
-export const getLevels = () => {
-  var enumSheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(enumSheetName);
-  return enumSheet
-    .getRange("1:1")
-    .getValues()
-    .flat()
-    .filter((value) => value !== '');
-}
+export const getLevels = () => getEnumList(model.SchoolLevel)
 
-export const getOtherSubtypes = () => {
-  var enumSheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(enumSheetName);
-  return enumSheet
-    .getRange("F:F")
-    .getValues()
-    .flat()
-    .filter((value) => value !== '');
-}
+export const getOtherSubtypes = () => getEnumList(model.GeneralStructureType)
 
 export const getSchools = () => {
   return SpreadsheetApp
@@ -33,8 +27,17 @@ export const getSchools = () => {
   .getSheetByName(schoolSheetName)
   .getDataRange()
   .getDisplayValues()
-  .map(row => [row[0], row[8]])
-  .map(row => row[0])
+  .map(row => new model.School(
+    row[8],
+    row[0],
+    row[1],
+    row[2],
+    row[3],
+    row[4],
+    row[5],
+    row[7],
+    row[6],
+  ))
 }
 
 export const getSchoolClassesAssociated = (schoolName) => {
@@ -48,24 +51,13 @@ export const getSchoolClassesAssociated = (schoolName) => {
   .at(7)
 
   var level = parseInt(levelString)
-  
   var column = getNextLetter('A', level);
   var columnCode = column + ":" + column;
 
   var ui = SpreadsheetApp.getUi();
   ui.alert('Value of level: ' + level + '\n ColumnCode : ' + columnCode );
 
-  var classList = SpreadsheetApp
-  .getActiveSpreadsheet()
-  .getSheetByName(enumSheetName)
-  .getRange(columnCode)
-  .getDisplayValues()
-  .filter(row => row[0] != '')
-  .slice(1)
-  .flat()
-
-  return classList;
-
+  return levelToClasses(level);
 }
 
 export const getSeances = () => {
@@ -182,33 +174,33 @@ export const addOther = (category, name, adress, postalCode, city, contactName, 
 
 export const addMovie = (movieName) => {
   var movieSheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(movieSheetName);
+
   appendDataToColumn(movieSheet, movieName, (new Date()).valueOf())
 }
 
 export const addMovieHour = (movieName, movieHour) => {
   var movieHourSheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(movieHourSheetName);
-  var position = appendToColumn(movieHourSheet, "A", movieName);
-  movieHourSheet.getRange(getNextColumn(position)).setValue(movieHour);
-  // appendDataToColumn(movieHourSheet, movieName, movieHour)
-
+  var calendarEvent = createEvent(movieHour, movieName);
   // var ui = SpreadsheetApp.getUi();
   // ui.alert('Hello world');
+
+  appendDataToColumn(movieHourSheet, movieName, movieHour, calendarEvent.getId())
 }
 
 export const addReservation = (movie, seance, structureType, structureName, nbrParticipants, nbrExos, klass = []) => {
-  var ui = SpreadsheetApp.getUi();
-  ui.alert("test ui");
-
-  var calendar = CalendarApp.getDefaultCalendar();
+  // var calendar = CalendarApp.getDefaultCalendar();
+  var calendar = CalendarApp.getCalendarsByName("Test").shift();
+  addReservationToSeance();
   var seanceDate = Date.parse(seance);
-  ui.alert("Seance date après Parse : " + seanceDate.toString());
-
   var reservationSheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(reservationSheetName);
   appendDataToColumn(reservationSheet, movie, seance, structureType, structureName, nbrParticipants, nbrExos, klass.toString());
 
-  calendar.createEvent("Séance pour le film '" + movie + "'", 
-  seanceDate, 
-  Date.prototype.addHours(seanceDate, 2) )
+  var ui = SpreadsheetApp.getUi();
+  ui.alert("Seance date après Parse  et append: " + seanceDate.toString());
+  // calendar.createEvent("Séance pour le film '" + movie + "'", 
+  // Date.parse(seance),
+  // Date.prototype.addHours(Date.parse(seance), 2) )
+
 }
 
 // Utilitaires
@@ -271,6 +263,11 @@ function formatPhoneNumber(number) {
 Date.prototype.addHours = function(h) {
   this.setTime(this.getTime() + (h*60*60*1000));
   return this;
+}
+
+function getEnumList(enumType) {
+  return Object.keys(enumType)
+  .filter((item) => { return isNaN(Number(item)) })
 }
 
 

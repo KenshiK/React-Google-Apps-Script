@@ -7,6 +7,8 @@ import CheckIcon from '@mui/icons-material/Check';
 import styled from '@emotion/styled'
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
+import {SchoolLevel, GeneralStructureType} from '../../utils/model'
+import * as helper from '../../utils/helper'
 
 // This is a wrapper for google.script.run that lets us use promises.
 import { serverFunctions } from '../../utils/serverFunctions';
@@ -17,12 +19,16 @@ const daycare = "Creche"
 const other = "Autre"
 
 const AddGroupDialog = () => {
+  const levelList = helper.getEnumList(SchoolLevel);
+  const subtypeList = helper.getEnumList(GeneralStructureType); 
+
+  // const [subtypeList, setSubtypeList] = React.useState([]);
+  // const [levelList, setLevelList] = React.useState([]);
+
   const [type, setType] = React.useState('');
   const [name, setName] = React.useState('');
   const [level, setLevel] = React.useState('');
-  const [levelList, setLevelList] = React.useState([]);
   const [subtype, setSubtype] = React.useState('');
-  const [subtypeList, setSubtypeList] = React.useState([]);
   const [contact, setContact] = React.useState('');
   const [contactNumber, setContactNumber] = React.useState('');
   const [adress, setAdress] = React.useState('');
@@ -32,25 +38,25 @@ const AddGroupDialog = () => {
 
   const typeList = [school, recreationCenter, daycare, other]
 
-  useEffect(() => {
-    switch (type) {
-      case school:
-      case recreationCenter:
-        {
-          var temp = getLevelList().then((arr) => setLevelList(arr))
-          console.log("level list promise : ")
-          console.log(temp)
-          break;
-        }
-      case other:
-        {
-          var temp = getOtherSubtypeList().then((arr) => setSubtypeList(arr))
-          console.log("Subtype list promise : ")
-          console.log(temp)
-          break;
-        }
-    } 
-  }, [type])
+  // useEffect(() => {
+  //   switch (type) {
+  //     case school:
+  //     case recreationCenter:
+  //       {
+  //         var temp = getLevelList().then((arr) => setLevelList(arr))
+  //         console.log("level list promise : ")
+  //         console.log(temp)
+  //         break;
+  //       }
+  //     case other:
+  //       {
+  //         var temp = getOtherSubtypeList().then((arr) => setSubtypeList(arr))
+  //         console.log("Subtype list promise : ")
+  //         console.log(temp)
+  //         break;
+  //       }
+  //   } 
+  // }, [type])
   
   const updateType = (value) => {
     setType(typeList[value])

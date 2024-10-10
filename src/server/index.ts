@@ -31,7 +31,6 @@ import {
   addReservation,
 } from './sheets';
 
-
 // Public functions must be exported as named exports
 export {
   onOpen,
