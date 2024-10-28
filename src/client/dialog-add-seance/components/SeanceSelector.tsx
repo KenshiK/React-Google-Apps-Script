@@ -5,16 +5,17 @@ import FormControl from '@mui/material/FormControl';
 import Button from '@mui/material/Button';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import styled from '@emotion/styled'
+import { Movie } from '../../utils/model';
 
 export default function SeanceSelector({ movieList, submitNewMovieHour  }: 
-  { movieList: Array<String>, submitNewMovieHour:Function  }) {
+  { movieList: Array<Movie>, submitNewMovieHour:Function  }) {
   
   const [movie, setMovie] = React.useState<String>('');
   const [dateTime, setDateTime] = React.useState('');
 
   const handleChange = (event: SelectChangeEvent) => {
     console.log(event.target);
-    console.log("movie from array :" + movieList[event.target.value]);
+    console.log("movie from array :" + movieList[event.target.value].title);
     setMovie(event.target.value as string);
     // setMovie(movieList[event.target.value]);
   }; 
@@ -23,9 +24,9 @@ export default function SeanceSelector({ movieList, submitNewMovieHour  }:
     event.preventDefault();
     if (dateTime == '') return;
     if (movie == '') return;
-    var movieName = movieList[+movie];
-    console.log("submitNewMovieHour movie :" + movieName + " hour : " + dateTime);
-    submitNewMovieHour(movieName, dateTime);
+    var selectedMovie = movieList[+movie] as Movie
+    console.log("submitNewMovieHour movie :" + selectedMovie.title + " hour : " + dateTime);
+    submitNewMovieHour(selectedMovie, dateTime);
   };
 
   return (
@@ -41,7 +42,7 @@ export default function SeanceSelector({ movieList, submitNewMovieHour  }:
             label="movie"
             onChange={handleChange}
           >
-            {movieList.map((movie, index) => <MenuItem value={index}>{movie}</MenuItem>)}
+            {movieList.map((movie, index) => <MenuItem value={index}>{movie.title}</MenuItem>)}
           </Select>
 
           <StyledInput type="datetime-local" value={dateTime} onChange={(ev) => setDateTime(ev.target.value)}/>

@@ -1,7 +1,8 @@
 import { HelpOutlineRounded, School } from '@mui/icons-material';
 import {
   createEvent,
-  addReservationToSeance
+  addReservationToSeance,
+  addToSchoolReport
 } from './helper';
 import * as model from './model';
 import { levelToClasses } from '../client/utils/helper';
@@ -15,6 +16,13 @@ const dayCareSheetName = "DayCare"
 const otherSheetName = "Other"
 const reservationSheetName = "Reservations"
 const enumSheetName = "Enum"
+const ReportSchoolSheetName = "Ecoles2024"
+const ReportSchoolSheet = SpreadsheetApp
+  .getActiveSpreadsheet()
+  .getSheetByName(ReportSchoolSheetName)
+const movieHourSheet = SpreadsheetApp
+  .getActiveSpreadsheet()
+  .getSheetByName(movieHourSheetName)
 
 // Getters 
 export const getLevels = () => getEnumList(model.SchoolLevel)
@@ -51,7 +59,7 @@ export const getSchoolClassesAssociated = (schoolName) => {
   .at(7)
 
   var level = parseInt(levelString)
-  var column = getNextLetter('A', level);
+  var column = offsetLetter('A', level);
   var columnCode = column + ":" + column;
 
   var ui = SpreadsheetApp.getUi();
@@ -78,17 +86,24 @@ export const getSeancesOfMovie = (movieId) => {
   .getDataRange()
   .getDisplayValues()
   .filter(row => row[0] == movieId)
-  .map(row => row[1])
+  // .map(row => row[1])
+  .map(row => new model.Seance(
+    row[3],
+    row[2],
+    row[1],
+    row[0],
+  ))
 }
 
 export const getMovies = () => {
   return SpreadsheetApp
   .getActiveSpreadsheet()
   .getSheetByName(movieSheetName)
-  .getRange("A:A")
-  .getValues()
-  .map((row) => row[0])
-  .filter((value) => value !== '');
+  .getDataRange()
+  .getDisplayValues()
+  // .getRange("A:A")
+  // .getValues()
+  .map(row => new model.Movie(row[1], row[0]))
 }
 
 export const getAllGroupsButSchools = () => {
@@ -98,7 +113,17 @@ export const getAllGroupsButSchools = () => {
   .getDataRange()
   .getDisplayValues()
   .slice(1)
-  .map(row => [row[0], row[7]])
+  // .map(row => [row[0], row[7]])
+  .map(row => new model.RecreationCenter(
+    row[7],
+    row[0],
+    row[1],
+    row[2],
+    row[3],
+    row[4],
+    row[5],
+    row[6],
+  ))
 
   var dayCareData = SpreadsheetApp
   .getActiveSpreadsheet()
@@ -106,7 +131,16 @@ export const getAllGroupsButSchools = () => {
   .getDataRange()
   .getDisplayValues()
   .slice(1)
-  .map(row => [row[0], row[6]])
+  // .map(row => [row[0], row[6]])
+  .map(row => new model.DayCare(
+    row[6],
+    row[0],
+    row[1],
+    row[2],
+    row[3],
+    row[4],
+    row[5],
+  ))
 
   var otherData = SpreadsheetApp
   .getActiveSpreadsheet()
@@ -114,9 +148,22 @@ export const getAllGroupsButSchools = () => {
   .getDataRange()
   .getDisplayValues()
   .slice(1)
-  .map(row => [row[0], row[7]])
+ // .map(row => [row[0], row[7]])
+  .map(row => new model.GeneralStucture(
+    row[7],
+    row[0],
+    row[1],
+    row[2],
+    row[3],
+    row[4],
+    row[5],
+    row[6],
+  ))
 
-  return recreationCenterData.concat(dayCareData, otherData).map(row => row[0])
+  var temp = recreationCenterData.concat(dayCareData, otherData)
+
+
+  return temp;
 }
 
 // Add
@@ -178,29 +225,43 @@ export const addMovie = (movieName) => {
   appendDataToColumn(movieSheet, movieName, (new Date()).valueOf())
 }
 
-export const addMovieHour = (movieName, movieHour) => {
+export const addMovieHour = (movie, movieHour) => {
   var movieHourSheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(movieHourSheetName);
-  var calendarEvent = createEvent(movieHour, movieName);
+  var calendarEvent = createEvent(movieHour, movie.title);
   // var ui = SpreadsheetApp.getUi();
   // ui.alert('Hello world');
 
-  appendDataToColumn(movieHourSheet, movieName, movieHour, calendarEvent.getId())
+  appendDataToColumn(movieHourSheet, movie.title, movie.id, movieHour, calendarEvent.getId())
 }
 
-export const addReservation = (movie, seance, structureType, structureName, nbrParticipants, nbrExos, klass = []) => {
-  // var calendar = CalendarApp.getDefaultCalendar();
+export const addReservation = (movie, seance, structureType, structure, nbrParticipants, nbrExos, klass = []) => {
   var calendar = CalendarApp.getCalendarsByName("Test").shift();
-  addReservationToSeance();
-  var seanceDate = Date.parse(seance);
+  addReservationToSeance(calendar.getEventById(seance.id), structure.name, nbrParticipants, nbrExos);
+
+  //var seanceDate = Date.parse(seance.hour);
+  //var ui = SpreadsheetApp.getUi();
+  //ui.alert("Seance date : " + seance.hour);
+
   var reservationSheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(reservationSheetName);
-  appendDataToColumn(reservationSheet, movie, seance, structureType, structureName, nbrParticipants, nbrExos, klass.toString());
-
-  var ui = SpreadsheetApp.getUi();
-  ui.alert("Seance date après Parse  et append: " + seanceDate.toString());
-  // calendar.createEvent("Séance pour le film '" + movie + "'", 
-  // Date.parse(seance),
-  // Date.prototype.addHours(Date.parse(seance), 2) )
-
+  appendDataToColumn(
+    reservationSheet, 
+    movie.title, 
+    seance.hour, 
+    structureType, 
+    structure.name, 
+    nbrParticipants, 
+    nbrExos, 
+    klass.toString(),
+    (new Date()).valueOf()
+  );
+  
+  addToSchoolReport(movie.title, 
+    seance.hour, 
+    structureType, 
+    nbrParticipants, 
+    nbrExos,
+    structure
+  );
 }
 
 // Utilitaires
@@ -209,7 +270,7 @@ function getNextColumn(currentCell) {
   return String.fromCharCode(currentColumnInInt + 1) + currentCell[1]; 
 }
 
-function getNextLetter(letter, add) {
+function offsetLetter(letter, add) {
   const endCode = letter.charCodeAt(0) + add;
   return String.fromCharCode(endCode);
 }
@@ -228,11 +289,10 @@ function appendToColumn(sheet, column, content) {
 function appendDataToColumn(sheet, ...data) {
   const lastRow = getLastRowNext(sheet);
   const startingColumn = "A";
-  const endColumn = getNextLetter(startingColumn, data.length-1);
+  const endColumn = offsetLetter(startingColumn, data.length-1);
 
   const startingCell = startingColumn + lastRow;
   const endingCell = endColumn + lastRow;
-
 
   sheet.getRange(startingCell + ":" + endingCell).setValues([data])
 }

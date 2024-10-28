@@ -2,7 +2,6 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import React, { FormEvent, useEffect } from 'react';
-import ClassChip from './ClassChip';
 
 
 export default function ElementSelector({ title, elementList, updateVariable, isChip = false}:

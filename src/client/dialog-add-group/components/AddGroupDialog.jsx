@@ -1,17 +1,17 @@
 import React , {useEffect} from 'react';
 import { Typography } from '@mui/material';
-import EtablishmentTypeSelector from './EtablishmentTypeSelector'
+import EtablishmentTypeSelector from './EtablishmentTypeSelector.tsx'
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import CheckIcon from '@mui/icons-material/Check';
 import styled from '@emotion/styled'
-import Select, { SelectChangeEvent } from '@mui/material/Select';
+import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
-import {SchoolLevel, GeneralStructureType} from '../../utils/model'
-import * as helper from '../../utils/helper'
+import {SchoolLevel, GeneralStructureType} from '../../utils/model.ts'
+import * as helper from '../../utils/helper.ts'
 
 // This is a wrapper for google.script.run that lets us use promises.
-import { serverFunctions } from '../../utils/serverFunctions';
+import { serverFunctions } from '../../utils/serverFunctions.ts';
 
 const school = "Scolaire"
 const recreationCenter = "Centre de loisir"
@@ -21,9 +21,6 @@ const other = "Autre"
 const AddGroupDialog = () => {
   const levelList = helper.getEnumList(SchoolLevel);
   const subtypeList = helper.getEnumList(GeneralStructureType); 
-
-  // const [subtypeList, setSubtypeList] = React.useState([]);
-  // const [levelList, setLevelList] = React.useState([]);
 
   const [type, setType] = React.useState('');
   const [name, setName] = React.useState('');

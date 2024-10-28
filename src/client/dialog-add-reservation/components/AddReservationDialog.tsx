@@ -1,9 +1,10 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Typography } from '@mui/material';
 import ReservationSelector from './ReservationSelector';
 
 // This is a wrapper for google.script.run that lets us use promises.
 import { serverFunctions } from '../../utils/serverFunctions';
+import { Movie, Seance, Structure } from '../../utils/model';
 
 const AddReservationDialog = () => {
   return (
@@ -22,16 +23,17 @@ const AddReservationDialog = () => {
 
 export default AddReservationDialog;
 
-export function submitReservationEx(movie,
-    seance,
-    structureType,
-    structureName,
-    nbrParticipants,
-    nbrExos,
-    klass) {
+export function submitReservationEx(
+    movie: Movie,
+    seance: Seance,
+    structureType: string,
+    structure: Structure,
+    nbrParticipants: number,
+    nbrExos: number,
+    klass: string[]) {
     try {
       console.log("call to backend add reservation");
-      const response = serverFunctions.addReservation(movie, seance, structureType, structureName, nbrParticipants, nbrExos, klass);
+       serverFunctions.addReservation(movie, seance, structureType, structure, nbrParticipants, nbrExos, klass);
     } catch (error) {
       // eslint-disable-next-line no-alert
       alert(error);

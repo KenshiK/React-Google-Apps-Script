@@ -5,42 +5,38 @@ import ElementSelector from './ElementSelector';
 // This is a wrapper for google.script.run that lets us use promises.
 import { serverFunctions } from '../../utils/serverFunctions';
 import ClassChip from './ClassChip';
-import { TextField } from '@mui/material';
+import { selectClasses, TextField } from '@mui/material';
 import {submitReservationEx} from './AddReservationDialog'
 import * as model from '../../utils/model'
 import { levelToClasses } from '../../utils/helper';
 
 
 export default function ReservationSelector() {
-  var [movie, setMovie] = React.useState<number>();
-  var [movieList, setMovieList] = React.useState<string[]>([]);
-  var [seance, setSeance] = React.useState<number>();
-  var [seanceList, setSeanceList] = React.useState<string[]>([]);
+  var [movieId, setMovie] = React.useState<number>();
+  var [movieList, setMovieList] = React.useState<model.Movie[]>([]);
+  var [seanceId, setSeanceId] = React.useState<number>();
+  var [seanceList, setSeanceList] = React.useState<model.Seance[]>([]);
   var [group, setGroup] = React.useState<number>();
   var [groupList, setGroupList] = React.useState<model.Structure[]>([]);
-  var [schoolClassAnswer, setSchoolClassAnswer] = React.useState<number>(null);
+  var [schoolClassAnswer, setSchoolClassAnswer] = React.useState<string[]>([]);
   var [schoolClassList, setSchoolClassList] = React.useState<string[]>([]);
   var [structureId, setStructureId] = React.useState<number>(null);
   var [nbrParticipants, setParticipants] = React.useState<number>(0);
   var [nbrExos, setExos] = React.useState<number>(0);
 
 
-  function setGroupAndUpdateClassList(groupId:number)
-  {
+  function setGroupAndUpdateClassList(groupId: number) {
     setGroup(groupId);
-    console.log("GroupId")
-    console.log(groupId)
-    console.log("GroupList")
-    console.log(groupList)
-    console.log("Group")
-    console.log(group)
-    console.log("selection")
-    console.log(groupList[groupId])
-
-    var classList = levelToClasses(Number((groupList[groupId] as model.RecreationCenter).level))
-    console.log("classList dans le set")
-    console.log(classList)
-    setSchoolClassList(classList)
+    var selectedGroup = groupList[groupId]
+    if (selectedGroup.hasOwnProperty('level')) {
+      console.log("change classList")
+      var classList = levelToClasses(Number((selectedGroup as model.RecreationCenter).level))
+      setSchoolClassList(classList)
+    }
+    else {
+      setSchoolClassList([]);
+      setSchoolClassAnswer([]);
+    }
   }
 
   const scolaire: string = "Scolaires";
@@ -52,8 +48,8 @@ export default function ReservationSelector() {
 
     console.log("Submit")
     console.log({
-      movie: movieList[movie],
-      seance: seanceList[seance],
+      movie: movieList[movieId],
+      seance: seanceList[seanceId],
       strucType: structureTypes[structureId],
       strucName: groupList[group],
       participants: nbrParticipants,
@@ -61,9 +57,8 @@ export default function ReservationSelector() {
       klass: schoolClassAnswer
     })
 
-
-    submitReservationEx(movieList[movie], 
-      seanceList[seance], 
+    submitReservationEx(movieList[movieId], 
+      seanceList[seanceId], 
       structureTypes[structureId], 
       groupList[group], 
       nbrParticipants, 
@@ -85,14 +80,14 @@ export default function ReservationSelector() {
     setStructureId(structureId);
   }
 
-  var isSchool: boolean = structureId != null && structureTypes[structureId] == scolaire;
+  var isSchool: boolean = structureId != null && schoolClassList != null && schoolClassList.length > 0;
 
   return (
     <form
       onSubmit={handleSubmit}
     >
-      <ElementSelector title="Movie" elementList={movieList} updateVariable={setMovieAndUpdateData} />
-      {ElementSelectorDependent(movieList[movie], "Seance", Element.Seance, setSeance, seanceList, setSeanceList)}
+      <ElementSelector title="Movie" elementList={movieList.map(movie => movie.title)} updateVariable={setMovieAndUpdateData} />
+      {ElementSelectorDependent(movieList[movieId] ? movieList[movieId].title : null, "Seance", Element.Seance, setSeanceId, seanceList.map(s => s.hour), setSeanceList)}
       <ElementSelector title="Type de structure" elementList={structureTypes} updateVariable={setStructureTypeAndUpdateData} />
       {structureId != null && structureTypes[structureId] == scolaire ?
         ElementSelectorDependent(structureTypes[structureId], "Scolaire", Element.School, /*setGroup*/setGroupAndUpdateClassList, groupList.map(g => g.name), setGroupList)

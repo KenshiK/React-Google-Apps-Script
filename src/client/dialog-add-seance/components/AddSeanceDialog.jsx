@@ -8,6 +8,8 @@ import { serverFunctions } from '../../utils/serverFunctions';
 const AddSeanceDialog = () => {
   const submitNewMovieHour = async (newMovie, newHour) => {
     try {
+      console.log("movie data")
+      console.log(newMovie);
       const response = await serverFunctions.addMovieHour(newMovie, newHour);
     } catch (error) {
       alert(error);

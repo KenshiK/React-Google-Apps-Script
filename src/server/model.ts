@@ -6,6 +6,7 @@ export interface Structure {
     adress: string;
     postalCode: string;
     city: string;
+    identifier: string;
 }
 
 class baseStructure implements Structure {
@@ -16,6 +17,7 @@ class baseStructure implements Structure {
     adress : string;
     postalCode : string;
     city : string;
+    identifier : string;
 
     constructor(id: number, 
         name: string, 
@@ -24,6 +26,7 @@ class baseStructure implements Structure {
         adress: string, 
         postalCode: string, 
         city: string,
+        identifier: string
         ) {
         this.id = id;
         this.name = name;
@@ -32,9 +35,11 @@ class baseStructure implements Structure {
         this.adress = adress;
         this.postalCode = postalCode;
         this.city = city;
+        this.identifier = identifier;
     }
 }
 
+export const DayCareIdentifier = "daycare"
 export class DayCare extends baseStructure {
     constructor(id: number,
         name: string,
@@ -44,10 +49,11 @@ export class DayCare extends baseStructure {
         postalCode: string,
         city: string,
     ) {
-        super(id, name, contactName, contactNumber, adress, postalCode, city)
+        super(id, name, contactName, contactNumber, adress, postalCode, city, DayCareIdentifier)
     }
 }
 
+export const GeneralStructureIdentifier = "general"
 export class GeneralStucture extends baseStructure {
     type : GeneralStructureType;
 
@@ -60,11 +66,12 @@ export class GeneralStucture extends baseStructure {
         city: string,
         type: GeneralStructureType
     ) {
-        super(id, name, contactName, contactNumber, adress, postalCode, city)
+        super(id, name, contactName, contactNumber, adress, postalCode, city, GeneralStructureIdentifier)
         this.type = type;
     }
 }
 
+export const RecreationCenterIdentifier = "recreationCenter"
 export class RecreationCenter extends baseStructure {
     level : SchoolLevel;
 
@@ -75,12 +82,14 @@ export class RecreationCenter extends baseStructure {
         adress: string, 
         postalCode: string, 
         city: string,
-        level: SchoolLevel) {
-            super(id, name, contactName, contactNumber, adress, postalCode, city)
+        level: SchoolLevel,
+        identifier: string = RecreationCenterIdentifier) {
+            super(id, name, contactName, contactNumber, adress, postalCode, city, identifier)
             this.level = level;
     }
 }
 
+export const SchoolIdentifier = "school"
 export class School extends RecreationCenter {
     rep : boolean;
     constructor(id: number, 
@@ -94,7 +103,7 @@ export class School extends RecreationCenter {
         rep : boolean
     )
     {
-            super(id, name, contactName, contactNumber, adress, postalCode, city, level)
+            super(id, name, contactName, contactNumber, adress, postalCode, city, level, SchoolIdentifier)
             this.rep = rep;
     }
 
@@ -154,21 +163,21 @@ export enum Superieur {
 }
 
 export class Movie {
-    id:number;
+    id:string;
     title:string;
 
-    constructor(id:number, title:string){
+    constructor(id:string, title:string){
         this.id = id;
         this.title = title;
     }
 }
 
 export class Seance {
-    id:number;
+    id:string;
     hour:string;
     movie:Movie;
 
-    constructor(id:number, hour:string, movieId:number, title:string){
+    constructor(id:string, hour:string, movieId:string, title:string){
         this.id = id;
         this.hour = hour;
         this.movie = new Movie(movieId, title);
