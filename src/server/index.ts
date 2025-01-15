@@ -6,11 +6,13 @@ import {
   openDialogSeance,
   openDialogReservation,
   openDialogSave,
+  openInit,
   openDialogGroup,
   openAboutSidebar,
 } from './ui';
 
 import {
+  init,
   getSheetsData,
   addSheet,
   deleteSheet,
@@ -33,6 +35,7 @@ import {
 
 // Public functions must be exported as named exports
 export {
+  init,
   onOpen,
   openDialog,
   openDialogMUI,
@@ -40,6 +43,7 @@ export {
   openDialogSeance,
   openDialogReservation,
   openDialogSave,
+  openInit,
   openDialogGroup,
   openAboutSidebar,
   getSheetsData,

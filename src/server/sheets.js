@@ -1,4 +1,3 @@
-import { HelpOutlineRounded, School } from '@mui/icons-material';
 import {
   createEvent,
   addReservationToSeance,
@@ -7,6 +6,10 @@ import {
 import * as model from './model';
 import { levelToClasses } from '../client/utils/helper';
 
+
+const ReportAssoSheetName = "Associations2024"
+const ReportRecreationSheetName = "CentresDeLoisirs2024"
+const ReportDayCareSheetName = "Creches2024"
 const movieSheetName = "Movies"
 const movieHourSheetName = "MovieHour"
 const groupSheetName = "Groups"
@@ -328,6 +331,33 @@ Date.prototype.addHours = function(h) {
 function getEnumList(enumType) {
   return Object.keys(enumType)
   .filter((item) => { return isNaN(Number(item)) })
+}
+
+export function init() {
+  const necessarySheetNames = [
+    movieSheetName,
+    movieHourSheetName,
+    groupSheetName,
+    schoolSheetName,
+    recreationCenterSheetName,
+    dayCareSheetName,
+    otherSheetName,
+    reservationSheetName,
+    enumSheetName,
+    ReportRecreationSheetName,
+    ReportDayCareSheetName,
+    ReportAssoSheetName,
+    ReportSchoolSheetName
+  ];
+  var activeSpreadsheet = SpreadsheetApp.getActiveSpreadsheet();
+
+  necessarySheetNames.forEach(name => {
+    var newSheet = activeSpreadsheet.getSheetByName(name);
+    if (newSheet == null) {
+      newSheet = activeSpreadsheet.insertSheet();
+      newSheet.setName(name);
+    }
+  })
 }
 
 

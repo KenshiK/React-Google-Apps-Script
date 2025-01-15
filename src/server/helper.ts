@@ -6,6 +6,7 @@ export const movieHourSheetName = "MovieHour"
 export const groupSheetName = "Groups"
 export const schoolSheetName = "Schools"
 export const recreationCenterSheetName = "RecreationCenter"
+
 export const dayCareSheetName = "DayCare"
 export const dayCareSheet = SpreadsheetApp
 .getActiveSpreadsheet()
@@ -26,8 +27,6 @@ SpreadsheetApp
   .getActiveSpreadsheet()
   .getSheetByName(ReportRecreationSheetName)
 
-
-
 export const ReportAssoSheetName = "Associations2024"
 export const ReportAssoSheet = 
 SpreadsheetApp
@@ -46,13 +45,13 @@ export const movieHourSheet = SpreadsheetApp
 
 export const createEvent = (dateToParse : string, movie : string) => {
 //   var ui = SpreadsheetApp.getUi();
-//   ui.alert("On est dans event");
+//   //ui.alert("On est dans event");
 
 //   var calendar = CalendarApp.getDefaultCalendar();
   var calendar = CalendarApp.getCalendarsByName("Test").shift();
   var date = new Date(dateToParse);
 
-//   ui.alert("Date en typescript " + date);
+//   //ui.alert("Date en typescript " + date);
 
   return calendar.createEvent("Séance pour le film '" + movie + "'", 
   date,
@@ -81,16 +80,14 @@ export const addToSchoolReport = (
   structure:DayCare | School | GeneralStucture | RecreationCenter
   )=> {
 
-
-
   var ui = SpreadsheetApp.getUi();
-  ui.alert("structure")
-  ui.alert(JSON.stringify(structure))
+  //ui.alert("structure")
+  //ui.alert(JSON.stringify(structure))
   var sheet:GoogleAppsScript.Spreadsheet.Sheet;
   var data: string[];
   switch(structure.identifier) {
     case SchoolIdentifier:
-      ui.alert("It is a School");
+      //ui.alert("It is a School");
       sheet = ReportSchoolSheet;
       data = [
         title, 
@@ -105,7 +102,7 @@ export const addToSchoolReport = (
       ]
       break;
     case RecreationCenterIdentifier:
-      ui.alert("It is a RecreationCenter");
+      //ui.alert("It is a RecreationCenter");
       sheet = ReportRecreationSheet;
       data = [
         title, 
@@ -119,7 +116,7 @@ export const addToSchoolReport = (
       ]
       break;
     case GeneralStructureIdentifier:
-      ui.alert("Asso");
+      //ui.alert("Asso");
       sheet = ReportAssoSheet;
       data = [
         title, 
@@ -132,7 +129,7 @@ export const addToSchoolReport = (
       ]
       break;
     case DayCareIdentifier:
-      ui.alert("Creche");
+      //ui.alert("Creche");
       sheet = ReportDayCareSheet;
       data = [
         title, 
@@ -145,10 +142,9 @@ export const addToSchoolReport = (
       ]
       break;
     default:
-      ui.alert("Not Implemented")
+      //ui.alert("Not Implemented")
       return
   }
-
 
   appendDataToReport(sheet, title, data);
 }
@@ -157,17 +153,17 @@ function appendDataToReport(sheet:GoogleAppsScript.Spreadsheet.Sheet, title:stri
 {
   var ui = SpreadsheetApp.getUi();
 
-  ui.alert("sheet " + sheet.getName());
+  //ui.alert("sheet " + sheet.getName());
   const titleRow = getTitleRow(title, sheet);
   const workingRow = titleRow + 1;
-  ui.alert("Title row for title " + title + " is " + titleRow);
+  //ui.alert("Title row for title " + title + " is " + titleRow);
 
   if (titleRow == 0) {
-    ui.alert("Add new");
+    //ui.alert("Add new");
     appendDataToColumn(sheet, ...data)
   }
   else {
-    ui.alert("Append to movie");
+    //ui.alert("Append to movie");
     data = data.slice(1)
 
     const startingColumn = "B";
@@ -227,7 +223,7 @@ function getLastRowNext(sheet:GoogleAppsScript.Spreadsheet.Sheet) {
 
 //   var ui = SpreadsheetApp.getUi();
 //
-//   ui.alert("Seance date après Parse  et append: " + seanceDate.toString());
+//   //ui.alert("Seance date après Parse  et append: " + seanceDate.toString());
 
 //   var reservationSheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(reservationSheetName);
 //   appendDataToColumn(

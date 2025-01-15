@@ -5,7 +5,8 @@ export const onOpen = () => {
     .addItem('Ajouter une séance', 'openDialogSeance')
     .addItem('Ajouter une nouvelle structure', 'openDialogGroup')
     .addItem('Ajouter une réservation', 'openDialogReservation')
-    .addItem('About me', 'openAboutSidebar');
+    .addItem('Initialiser le Google Sheet', 'openInit');
+    // .addItem('About me', 'openAboutSidebar');
 
   menu.addToUi();
 };
@@ -63,4 +64,11 @@ export const openDialogSave = () => {
     .setWidth(600)
     .setHeight(600);
   SpreadsheetApp.getUi().showModalDialog(html, 'SaveFile');
+};
+
+export const openInit = () => {
+  const html = HtmlService.createHtmlOutputFromFile('dialog-init')
+    .setWidth(600)
+    .setHeight(600);
+  SpreadsheetApp.getUi().showModalDialog(html, 'Initialiser le spreadsheet');
 };

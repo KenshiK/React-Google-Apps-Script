@@ -82,6 +82,12 @@ const clientEntrypoints = [
     filename: 'dialog-add-group',
     template: './src/client/dialog-add-group/index.html',
   },
+  {
+    name: 'CLIENT - Dialog Init',
+    entry: './src/client/dialog-init/index.js',
+    filename: 'dialog-init',
+    template: './src/client/dialog-init/index.html',
+  },
   // {
   //   name: 'CLIENT - Save',
   //   entry: './src/client/dialog-save/index.js',
