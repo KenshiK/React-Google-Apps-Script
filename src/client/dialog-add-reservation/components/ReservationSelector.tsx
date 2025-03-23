@@ -46,17 +46,6 @@ export default function ReservationSelector() {
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    /* console.log("Submit")
-    console.log({
-      movie: movieList[movieId],
-      seance: seanceList[seanceId],
-      strucType: structureTypes[structureId],
-      strucName: groupList[group],
-      participants: nbrParticipants,
-      exos: nbrExos,
-      klass: schoolClassAnswer
-    }) */
-
     submitReservationEx(movieList[movieId], 
       seanceList[seanceId], 
       structureTypes[structureId], 
@@ -68,8 +57,8 @@ export default function ReservationSelector() {
 
   useEffect(() => {
     var temp = getElementList(Element.Movie, null).then((arr) => setMovieList(arr))
-    console.log("movie list promise : ")
-    console.log(temp)
+    // console.log("movie list promise : ")
+    // console.log(temp)
   }, [])
 
   async function setMovieAndUpdateData(movie: number) {
@@ -175,34 +164,15 @@ function ClassChipElement (selectedValue : model.Structure,
   elementListUpdate: Function,
   display: boolean = false) {
 
-    console.log('Display : ' + display)
-    console.log(selectedValue)
-    console.log('C\'est une school ? ' + (selectedValue instanceof model.School))
-
-  // if (display == true && selectedValue instanceof model.School)
-  // {
-  //   console.log("dans le if");
-  //   elementListUpdate(
-  //     levelToClasses(
-  //       (selectedValue as model.RecreationCenter).level
-  //     ))
-  // }
-
   useEffect(() => {
     if (display == true) {
-      console.log("dans le if");
       elementListUpdate(
         levelToClasses(
           (selectedValue as model.RecreationCenter).level
         ))
     }
-    // if(display == true)
-    // getClasses(selectedValue).then((arr) => elementListUpdate(arr));
   }, [selectedValue, elementListUpdate])
 
-  console.log("Display school ? " + display)
-  console.log("elementList")
-  console.log(elementList)
   return (
     <ClassChip classList={elementList} updateClassListAnswer={elementUpdate} display={display} />
   )
@@ -212,8 +182,6 @@ async function getClasses(structure: model.RecreationCenter | model.School) {
   structure.level
   try {
     var response = (await serverFunctions.getSchoolClassesAssociated(structure.name));
-    console.log("Schools");
-    console.log(response);
     return response;
   } catch (error) {
     alert(error);
@@ -223,38 +191,35 @@ async function getClasses(structure: model.RecreationCenter | model.School) {
 async function getElementList(elem: Element, dependency: String) {
   try {
     var response = [];
-    console.log("getElementList " + elem);
+    // console.log("getElementList " + elem);
     switch (elem) {
       case Element.Movie:
         {
-          console.log("MovieList");
+          // console.log("MovieList");
           response = (await serverFunctions.getMovies());
-          console.log(response);
           break;
         }
       case Element.School:
         {
-          console.log("Schools");
+          // console.log("Schools");
           response = (await serverFunctions.getSchools());
-          console.log(response);
           break;
         }
       case Element.Group:
         {
-          console.log("Group");
+          // console.log("Group");
           response = (await serverFunctions.getAllGroupsButSchools());
-          console.log(response);
           break;
         }
       case Element.Seance:
         {
-          console.log("SeanceList");
+          // console.log("SeanceList");
           if (dependency == null || dependency == "") break;
           response = (await serverFunctions.getSeancesOfMovie(dependency));
-          console.log(response);
           break;
         }
     }
+    // console.log(response);
     return response;
   } catch (error) {
     alert(error);

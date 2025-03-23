@@ -40,8 +40,6 @@ const AddGroupDialog = () => {
   }
 
   const handleLevelSelectChange = (event) => {
-    console.log(event.target);
-    console.log("level from array :" + levelList[event.target.value]);
     setLevel(event.target.value);
   }; 
 
@@ -152,7 +150,6 @@ const AddGroupDialog = () => {
   const handleSubmit = async (event) => {
       event.preventDefault();
 
-    console.log("Added " + type)
     try {
     let success = false;
       switch (type) {
@@ -179,11 +176,8 @@ const AddGroupDialog = () => {
       }
       if(success == true)
       {
-        console.log('tentative de destruction de la page')
         google.script.host.close();
       }
-      else 
-        console.log('no success in updating')
     } catch (error) {
       alert(error);
     }
@@ -231,8 +225,6 @@ const StyledSelect = styled(Select)({
 async function getLevelList() {
   try {
     const response = (await serverFunctions.getLevels());
-    console.log("LevelList")
-    console.log(response)
     return response;
   } catch (error) {
     alert(error);
@@ -243,8 +235,6 @@ async function getLevelList() {
 async function getOtherSubtypeList() {
   try {
     const response = (await serverFunctions.getOtherSubtypes());
-    console.log("Subtypes")
-    console.log(response)
     return response;
   } catch (error) {
     alert(error);

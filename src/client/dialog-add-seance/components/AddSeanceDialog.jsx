@@ -8,8 +8,6 @@ import { serverFunctions } from '../../utils/serverFunctions';
 const AddSeanceDialog = () => {
   const submitNewMovieHour = async (newMovie, newHour) => {
     try {
-      console.log("movie data")
-      console.log(newMovie);
       const response = await serverFunctions.addMovieHour(newMovie, newHour);
       google.script.host.close();
     } catch (error) {
@@ -21,8 +19,6 @@ const AddSeanceDialog = () => {
 
   useEffect(() => {
     var temp = getMovieList().then((arr) => setMovieList(arr))
-    console.log("movie list promise : ")
-    console.log(temp)
   }, [])
   
   return (
@@ -47,11 +43,8 @@ export default AddSeanceDialog;
 async function getMovieList() {
   try {
     const response = (await serverFunctions.getMovies());
-    console.log("MovieList")
-    console.log(response)
     return response;
   } catch (error) {
-    // eslint-disable-next-line no-alert
     alert(error);
   }
   return [];

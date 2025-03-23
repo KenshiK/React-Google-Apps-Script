@@ -69,9 +69,6 @@ export const getSchoolClassesAssociated = (schoolName) => {
   const column = offsetLetter('A', level);
   const columnCode = column + ":" + column;
 
-  const ui = SpreadsheetApp.getUi();
-  ui.alert('Value of level: ' + level + '\n ColumnCode : ' + columnCode );
-
   return levelToClasses(level);
 }
 
@@ -85,8 +82,6 @@ export const getSeances = () => {
 }
 
 export const getSeancesOfMovie = (movieId) => {
-  // var ui = SpreadsheetApp.getUi();
-  // ui.alert('Id : ' + movieId);
   return SpreadsheetApp
   .getActiveSpreadsheet()
   .getSheetByName(movieHourSheetName)
@@ -126,9 +121,6 @@ export const getAllGroupsButSchools = () => {
     row[6],
   ))
 
-  const ui = SpreadsheetApp.getUi();
-  ui.alert('centre aéré : ' + recreationCenterData.length);
-
   const dayCareData = SpreadsheetApp
   .getActiveSpreadsheet()
   .getSheetByName(dayCareSheetName)
@@ -144,7 +136,6 @@ export const getAllGroupsButSchools = () => {
     row[4],
     row[5],
   ))
-  ui.alert('day care : ' + dayCareData.length);
 
   const otherData = SpreadsheetApp
   .getActiveSpreadsheet()
@@ -163,11 +154,8 @@ export const getAllGroupsButSchools = () => {
     row[6],
   ))
 
-  ui.alert('other data : ' + otherData.length);
 
   const temp = recreationCenterData.concat(dayCareData, otherData)
-  ui.alert('complete : ')
-  ui.alert(temp)
   return temp;
 }
 
@@ -253,7 +241,7 @@ export const addReservation = (movie, seance, structureType, structure, nbrParti
   addReservationToSeance(calendar.getEventById(seance.id), structure, structure.contactName, structure.contactNumber, nbrParticipants, nbrExos, klass);
 
   //var seanceDate = Date.parse(seance.hour);
-  ui.alert("Seance date : " + seance.hour);
+  // ui.alert("Seance date : " + seance.hour);
 
   const reservationSheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(reservationSheetName);
   appendDataToColumn(
@@ -361,8 +349,8 @@ export function init() {
   ];
   const activeSpreadsheet = SpreadsheetApp.getActiveSpreadsheet();
   const ui = SpreadsheetApp.getUi();
-  ui.alert('Création des sheets');
-  ui.alert(necessarySheetNames.join(','));
+  // ui.alert('Création des sheets');
+  // ui.alert(necessarySheetNames.join(','));
 
   necessarySheetNames.forEach(name => {
     let newSheet = activeSpreadsheet.getSheetByName(name);

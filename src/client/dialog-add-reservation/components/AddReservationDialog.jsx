@@ -32,11 +32,9 @@ export function submitReservationEx(
     nbrExos,
     klass) {
     try {
-      // console.log("call to backend add reservation");
        serverFunctions.addReservation(movie, seance, structureType, structure, nbrParticipants, nbrExos, klass);
        google.script.host.close();
     } catch (error) {
-      // eslint-disable-next-line no-alert
       alert(error.toString());
     }
   }

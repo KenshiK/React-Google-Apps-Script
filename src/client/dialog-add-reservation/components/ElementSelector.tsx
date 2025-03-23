@@ -11,8 +11,6 @@ export default function ElementSelector({ title, elementList, updateVariable, is
 
     function handleChange (event: SelectChangeEvent) 
     {
-        console.log(event.target);
-        console.log("element from array :" + elementList[event.target.value]);
         setElement(event.target.value);
         updateVariable(event.target.value);
     };

@@ -28,16 +28,11 @@ export default function ClassChip({classList, updateClassListAnswer, display} :
     function handleChange(event: SelectChangeEvent<typeof classes>) {
 
         const value = event.target.value;
-        console.log("selected value : " + value)
-
         // On autofill we get a stringified value.
         const final = typeof value === 'string' ? value.split(',') : value
         setClasses(final);
         updateClassListAnswer( typeof value === 'string' ? value.split(',') : value,);
     };
-
-    console.log("classList")
-    console.log(classList)
 
     return (
         <StyledSpan>
