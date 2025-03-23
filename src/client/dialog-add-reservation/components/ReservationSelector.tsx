@@ -29,7 +29,7 @@ export default function ReservationSelector() {
     setGroup(groupId);
     var selectedGroup = groupList[groupId]
     if (selectedGroup.hasOwnProperty('level')) {
-      console.log("change classList")
+      // console.log("change classList")
       var classList = levelToClasses(Number((selectedGroup as model.RecreationCenter).level))
       setSchoolClassList(classList)
     }
@@ -46,7 +46,7 @@ export default function ReservationSelector() {
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    console.log("Submit")
+    /* console.log("Submit")
     console.log({
       movie: movieList[movieId],
       seance: seanceList[seanceId],
@@ -55,7 +55,7 @@ export default function ReservationSelector() {
       participants: nbrParticipants,
       exos: nbrExos,
       klass: schoolClassAnswer
-    })
+    }) */
 
     submitReservationEx(movieList[movieId], 
       seanceList[seanceId], 
@@ -223,33 +223,34 @@ async function getClasses(structure: model.RecreationCenter | model.School) {
 async function getElementList(elem: Element, dependency: String) {
   try {
     var response = [];
+    console.log("getElementList " + elem);
     switch (elem) {
       case Element.Movie:
         {
-          response = (await serverFunctions.getMovies());
           console.log("MovieList");
+          response = (await serverFunctions.getMovies());
           console.log(response);
           break;
         }
       case Element.School:
         {
-          response = (await serverFunctions.getSchools());
           console.log("Schools");
+          response = (await serverFunctions.getSchools());
           console.log(response);
           break;
         }
       case Element.Group:
         {
-          response = (await serverFunctions.getAllGroupsButSchools());
           console.log("Group");
+          response = (await serverFunctions.getAllGroupsButSchools());
           console.log(response);
           break;
         }
       case Element.Seance:
         {
+          console.log("SeanceList");
           if (dependency == null || dependency == "") break;
           response = (await serverFunctions.getSeancesOfMovie(dependency));
-          console.log("SeanceList");
           console.log(response);
           break;
         }

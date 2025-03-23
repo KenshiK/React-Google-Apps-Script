@@ -35,26 +35,6 @@ const AddGroupDialog = () => {
 
   const typeList = [school, recreationCenter, daycare, other]
 
-  // useEffect(() => {
-  //   switch (type) {
-  //     case school:
-  //     case recreationCenter:
-  //       {
-  //         var temp = getLevelList().then((arr) => setLevelList(arr))
-  //         console.log("level list promise : ")
-  //         console.log(temp)
-  //         break;
-  //       }
-  //     case other:
-  //       {
-  //         var temp = getOtherSubtypeList().then((arr) => setSubtypeList(arr))
-  //         console.log("Subtype list promise : ")
-  //         console.log(temp)
-  //         break;
-  //       }
-  //   } 
-  // }, [type])
-  
   const updateType = (value) => {
     setType(typeList[value])
   }
@@ -174,28 +154,36 @@ const AddGroupDialog = () => {
 
     console.log("Added " + type)
     try {
+    let success = false;
       switch (type) {
         case school:
           {
-            await serverFunctions.addSchool(name, level, adress, postalCode, city, contact, contactNumber, isRep);
+            success = await serverFunctions.addSchool(name, level, adress, postalCode, city, contact, contactNumber, isRep);
             break;
           }
         case recreationCenter:
           {
-            await serverFunctions.addCenter(name, level, adress, postalCode, city, contact, contactNumber);
+            success = await serverFunctions.addCenter(name, level, adress, postalCode, city, contact, contactNumber);
             break;
           }
         case daycare:
           {
-            await serverFunctions.addDayCare(name, adress, postalCode, city, contact, contactNumber);
+            success = await serverFunctions.addDayCare(name, adress, postalCode, city, contact, contactNumber);
             break;
           }
         case other:
           {
-            await serverFunctions.addOther(subtype, name, adress, postalCode, city, contact, contactNumber);
+            success = await serverFunctions.addOther(subtype, name, adress, postalCode, city, contact, contactNumber);
             break;
           }
       }
+      if(success == true)
+      {
+        console.log('tentative de destruction de la page')
+        google.script.host.close();
+      }
+      else 
+        console.log('no success in updating')
     } catch (error) {
       alert(error);
     }

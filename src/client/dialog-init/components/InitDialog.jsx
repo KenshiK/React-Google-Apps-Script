@@ -9,6 +9,7 @@ const InitDialog = () => {
   const startInit = async () => {
     try {
       response = await serverFunctions.init();
+      google.script.host.close();
     } catch (error) {
       alert(error);
     }

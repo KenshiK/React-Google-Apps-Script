@@ -14,18 +14,22 @@ export default function SeanceSelector({ movieList, submitNewMovieHour  }:
   const [dateTime, setDateTime] = React.useState('');
 
   const handleChange = (event: SelectChangeEvent) => {
-    console.log(event.target);
-    console.log("movie from array :" + movieList[event.target.value].title);
+    // console.log(event.target);
+    // console.log("movie from array :" + movieList[event.target.value].title);
     setMovie(event.target.value as string);
     // setMovie(movieList[event.target.value]);
   }; 
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    // console.log('enregistrement avec les data suivantes')
+    // console.log(dateTime)
+    // console.log(movie)
+    // console.log(movieList)
     if (dateTime == '') return;
-    if (movie == '') return;
-    var selectedMovie = movieList[+movie] as Movie
-    console.log("submitNewMovieHour movie :" + selectedMovie.title + " hour : " + dateTime);
+    if (movie == undefined || typeof movie === 'string') return;
+    const selectedMovie = movieList[+movie] as Movie
+    // console.log("submitNewMovieHour movie :" + selectedMovie.title + " hour : " + dateTime);
     submitNewMovieHour(selectedMovie, dateTime);
   };
 
@@ -49,7 +53,7 @@ export default function SeanceSelector({ movieList, submitNewMovieHour  }:
         </FormControl>
 
         <Button variant="contained" type="submit">
-          Submit
+          Enregistrer
         </Button>
       </form>
   );

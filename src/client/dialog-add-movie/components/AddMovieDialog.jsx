@@ -8,7 +8,9 @@ import { serverFunctions } from '../../utils/serverFunctions';
 const AddMovieDialog = () => {
   const submitNewMovie = async (newMovie) => {
     try {
-      const response = await serverFunctions.addMovie(newMovie);
+      console.log('fermeture p1')
+      await serverFunctions.addMovie(newMovie);
+      google.script.host.close();
     } catch (error) {
       // eslint-disable-next-line no-alert
       alert(error);

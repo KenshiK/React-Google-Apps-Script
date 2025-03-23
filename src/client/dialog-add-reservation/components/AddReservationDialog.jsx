@@ -4,7 +4,7 @@ import ReservationSelector from './ReservationSelector';
 
 // This is a wrapper for google.script.run that lets us use promises.
 import { serverFunctions } from '../../utils/serverFunctions';
-import { Movie, Seance, Structure } from '../../utils/model';
+// import { Movie, Seance, Structure } from '../../utils/model';
 
 const AddReservationDialog = () => {
   return (
@@ -24,18 +24,19 @@ const AddReservationDialog = () => {
 export default AddReservationDialog;
 
 export function submitReservationEx(
-    movie: Movie,
-    seance: Seance,
-    structureType: string,
-    structure: Structure,
-    nbrParticipants: number,
-    nbrExos: number,
-    klass: string[]) {
+    movie,
+    seance,
+    structureType,
+    structure,
+    nbrParticipants,
+    nbrExos,
+    klass) {
     try {
-      console.log("call to backend add reservation");
+      // console.log("call to backend add reservation");
        serverFunctions.addReservation(movie, seance, structureType, structure, nbrParticipants, nbrExos, klass);
+       google.script.host.close();
     } catch (error) {
       // eslint-disable-next-line no-alert
-      alert(error);
+      alert(error.toString());
     }
   }

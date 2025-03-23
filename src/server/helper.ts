@@ -1,9 +1,9 @@
 import { DayCare, DayCareIdentifier, GeneralStructureIdentifier, GeneralStucture, Movie, RecreationCenter, RecreationCenterIdentifier, School, SchoolIdentifier, Seance, Structure } from "./model";
 
+export const calendarName = "Test"
 
 export const movieSheetName = "Movies"
 export const movieHourSheetName = "MovieHour"
-export const groupSheetName = "Groups"
 export const schoolSheetName = "Schools"
 export const recreationCenterSheetName = "RecreationCenter"
 
@@ -47,11 +47,10 @@ export const createEvent = (dateToParse : string, movie : string) => {
 //   var ui = SpreadsheetApp.getUi();
 //   //ui.alert("On est dans event");
 
-//   var calendar = CalendarApp.getDefaultCalendar();
-  var calendar = CalendarApp.getCalendarsByName("Test").shift();
-  var date = new Date(dateToParse);
-
-//   //ui.alert("Date en typescript " + date);
+  const calendar = CalendarApp.getDefaultCalendar();
+  // var calendar = CalendarApp.getCalendarsByName(calendarName).shift();
+  const date = new Date(dateToParse);
+  //ui.alert("Date en typescript " + date);
 
   return calendar.createEvent("Séance pour le film '" + movie + "'", 
   date,
@@ -65,10 +64,25 @@ const addHours = function(date, addition: number) {
 
 export const addReservationToSeance = (
      calendarEvent : GoogleAppsScript.Calendar.CalendarEvent,
-     structureName : string,
+     structure : Structure,
+     contactName : string,
+     contactNumber : string,
      nbrParticipant : number,
-     nbrExo : number ) => {
-  calendarEvent.setDescription(calendarEvent.getDescription() + "\n Réservation de " + structureName + "(" + nbrParticipant + "\\" + nbrExo + ")");
+     nbrExo : number,
+     klass : Array<string> = [] ) => {
+  let ComplementaryInfos : string = "";
+  if(structure instanceof RecreationCenter) 
+    ComplementaryInfos = "\n --- Niveau scolaire : " + (structure as RecreationCenter).level.toString();
+
+
+  calendarEvent
+    .setDescription(calendarEvent.getDescription() 
+      + "\n Réservation de " + structure.name + " - " + structure.city + " :" 
+      + "\n --- Nombre de participants : " + nbrParticipant + " + " + nbrExo + " exos"
+      + ComplementaryInfos
+      + (klass.length > 0 ? "\n --- Classes : " + klass.toString() : "" )
+      + "\n --- Contact : " + contactName + "(" + contactNumber + ") \n"
+    );
 }
 
 export const addToSchoolReport = (
@@ -102,7 +116,6 @@ export const addToSchoolReport = (
       ]
       break;
     case RecreationCenterIdentifier:
-      //ui.alert("It is a RecreationCenter");
       sheet = ReportRecreationSheet;
       data = [
         title, 

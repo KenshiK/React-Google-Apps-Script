@@ -5,7 +5,7 @@ export const onOpen = () => {
     .addItem('Ajouter une séance', 'openDialogSeance')
     .addItem('Ajouter une nouvelle structure', 'openDialogGroup')
     .addItem('Ajouter une réservation', 'openDialogReservation')
-    .addItem('Initialiser le Google Sheet', 'openInit');
+    .addItem('Initialiser la feuille excel ', 'openInit');
     // .addItem('About me', 'openAboutSidebar');
 
   menu.addToUi();

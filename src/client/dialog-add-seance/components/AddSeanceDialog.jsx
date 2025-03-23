@@ -11,6 +11,7 @@ const AddSeanceDialog = () => {
       console.log("movie data")
       console.log(newMovie);
       const response = await serverFunctions.addMovieHour(newMovie, newHour);
+      google.script.host.close();
     } catch (error) {
       alert(error);
     }

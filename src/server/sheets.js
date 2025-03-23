@@ -5,6 +5,8 @@ import {
 } from './helper';
 import * as model from './model';
 import { levelToClasses } from '../client/utils/helper';
+import { School } from './model.ts';
+// import { calendarName } from './helper.ts';
 
 
 const ReportAssoSheetName = "Associations2024"
@@ -12,7 +14,6 @@ const ReportRecreationSheetName = "CentresDeLoisirs2024"
 const ReportDayCareSheetName = "Creches2024"
 const movieSheetName = "Movies"
 const movieHourSheetName = "MovieHour"
-const groupSheetName = "Groups"
 const schoolSheetName = "Schools"
 const recreationCenterSheetName = "RecreationCenter"
 const dayCareSheetName = "DayCare"
@@ -20,6 +21,9 @@ const otherSheetName = "Other"
 const reservationSheetName = "Reservations"
 const enumSheetName = "Enum"
 const ReportSchoolSheetName = "Ecoles2024"
+const recreationCenterSheet = SpreadsheetApp
+  .getActiveSpreadsheet()
+  .getSheetByName(recreationCenterSheetName)
 const ReportSchoolSheet = SpreadsheetApp
   .getActiveSpreadsheet()
   .getSheetByName(ReportSchoolSheetName)
@@ -52,7 +56,7 @@ export const getSchools = () => {
 }
 
 export const getSchoolClassesAssociated = (schoolName) => {
-  var levelString = SpreadsheetApp
+  const levelString = SpreadsheetApp
   .getActiveSpreadsheet()
   .getSheetByName(schoolSheetName)
   .getDataRange()
@@ -61,11 +65,11 @@ export const getSchoolClassesAssociated = (schoolName) => {
   .flat()
   .at(7)
 
-  var level = parseInt(levelString)
-  var column = offsetLetter('A', level);
-  var columnCode = column + ":" + column;
+  const level = parseInt(levelString)
+  const column = offsetLetter('A', level);
+  const columnCode = column + ":" + column;
 
-  var ui = SpreadsheetApp.getUi();
+  const ui = SpreadsheetApp.getUi();
   ui.alert('Value of level: ' + level + '\n ColumnCode : ' + columnCode );
 
   return levelToClasses(level);
@@ -89,7 +93,6 @@ export const getSeancesOfMovie = (movieId) => {
   .getDataRange()
   .getDisplayValues()
   .filter(row => row[0] == movieId)
-  // .map(row => row[1])
   .map(row => new model.Seance(
     row[3],
     row[2],
@@ -104,19 +107,14 @@ export const getMovies = () => {
   .getSheetByName(movieSheetName)
   .getDataRange()
   .getDisplayValues()
-  // .getRange("A:A")
-  // .getValues()
   .map(row => new model.Movie(row[1], row[0]))
 }
 
 export const getAllGroupsButSchools = () => {
-  var recreationCenterData = SpreadsheetApp
-  .getActiveSpreadsheet()
-  .getSheetByName(recreationCenterSheetName)
+  const recreationCenterData = recreationCenterSheet
   .getDataRange()
   .getDisplayValues()
-  .slice(1)
-  // .map(row => [row[0], row[7]])
+  // .slice(1)
   .map(row => new model.RecreationCenter(
     row[7],
     row[0],
@@ -128,13 +126,15 @@ export const getAllGroupsButSchools = () => {
     row[6],
   ))
 
-  var dayCareData = SpreadsheetApp
+  const ui = SpreadsheetApp.getUi();
+  ui.alert('centre aéré : ' + recreationCenterData.length);
+
+  const dayCareData = SpreadsheetApp
   .getActiveSpreadsheet()
   .getSheetByName(dayCareSheetName)
   .getDataRange()
   .getDisplayValues()
-  .slice(1)
-  // .map(row => [row[0], row[6]])
+  // .slice(1)
   .map(row => new model.DayCare(
     row[6],
     row[0],
@@ -144,14 +144,14 @@ export const getAllGroupsButSchools = () => {
     row[4],
     row[5],
   ))
+  ui.alert('day care : ' + dayCareData.length);
 
-  var otherData = SpreadsheetApp
+  const otherData = SpreadsheetApp
   .getActiveSpreadsheet()
   .getSheetByName(otherSheetName)
   .getDataRange()
   .getDisplayValues()
-  .slice(1)
- // .map(row => [row[0], row[7]])
+  // .slice(1)
   .map(row => new model.GeneralStucture(
     row[7],
     row[0],
@@ -163,15 +163,17 @@ export const getAllGroupsButSchools = () => {
     row[6],
   ))
 
-  var temp = recreationCenterData.concat(dayCareData, otherData)
+  ui.alert('other data : ' + otherData.length);
 
-
+  const temp = recreationCenterData.concat(dayCareData, otherData)
+  ui.alert('complete : ')
+  ui.alert(temp)
   return temp;
 }
 
 // Add
 export const addSchool = (schoolName, level, adress, postalCode, city, contactName, contactNumber, isRep) => {
-  var schoolSheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(schoolSheetName);
+  const schoolSheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(schoolSheetName);
   appendDataToColumn(schoolSheet, 
     schoolName, 
     contactName, 
@@ -182,10 +184,11 @@ export const addSchool = (schoolName, level, adress, postalCode, city, contactNa
     isRep, 
     level, 
     (new Date()).valueOf())
+  return true;
 }
 
 export const addCenter = (centerName, level, adress, postalCode, city, contactName, contactNumber) => {
-  var centerSheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(recreationCenterSheetName);
+  const centerSheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(recreationCenterSheetName);
   appendDataToColumn(centerSheet, 
     centerName, 
     contactName, 
@@ -195,10 +198,11 @@ export const addCenter = (centerName, level, adress, postalCode, city, contactNa
     city, 
     level, 
     (new Date()).valueOf())
+  return true;
 }
 
 export const addDayCare = (name, adress, postalCode, city, contactName, contactNumber) => {
-  var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(dayCareSheetName);
+  const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(dayCareSheetName);
   appendDataToColumn(sheet, 
     name, 
     contactName, 
@@ -207,10 +211,11 @@ export const addDayCare = (name, adress, postalCode, city, contactName, contactN
     postalCode, 
     city, 
     (new Date()).valueOf())
+  return true;
 }
 
 export const addOther = (category, name, adress, postalCode, city, contactName, contactNumber) => {
-  var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(otherSheetName);
+  const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(otherSheetName);
   appendDataToColumn(sheet, 
     name, 
     contactName, 
@@ -220,32 +225,37 @@ export const addOther = (category, name, adress, postalCode, city, contactName, 
     city, 
     category,
     (new Date()).valueOf())
+  return true;
 }
 
 export const addMovie = (movieName) => {
-  var movieSheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(movieSheetName);
+  const movieSheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(movieSheetName);
 
   appendDataToColumn(movieSheet, movieName, (new Date()).valueOf())
+  return true;
 }
 
 export const addMovieHour = (movie, movieHour) => {
-  var movieHourSheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(movieHourSheetName);
-  var calendarEvent = createEvent(movieHour, movie.title);
-  // var ui = SpreadsheetApp.getUi();
-  // ui.alert('Hello world');
+  // const ui = SpreadsheetApp.getUi();
+  // ui.alert('ajout de seance : ' + movie + ' a l\'heure : '+ movieHour);
+  const movieHourSheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(movieHourSheetName);
+  const calendarEvent = createEvent(movieHour, movie.title);
 
   appendDataToColumn(movieHourSheet, movie.title, movie.id, movieHour, calendarEvent.getId())
+  return true;
 }
 
 export const addReservation = (movie, seance, structureType, structure, nbrParticipants, nbrExos, klass = []) => {
-  var calendar = CalendarApp.getCalendarsByName("Test").shift();
-  addReservationToSeance(calendar.getEventById(seance.id), structure.name, nbrParticipants, nbrExos);
+  // var calendar = CalendarApp.getCalendarsByName(calendarName).shift();
+  const calendar = CalendarApp.getDefaultCalendar();
+  // const ui = SpreadsheetApp.getUi();
+  // ui.alert(calendar.getName());
+  addReservationToSeance(calendar.getEventById(seance.id), structure, structure.contactName, structure.contactNumber, nbrParticipants, nbrExos, klass);
 
   //var seanceDate = Date.parse(seance.hour);
-  //var ui = SpreadsheetApp.getUi();
-  //ui.alert("Seance date : " + seance.hour);
+  ui.alert("Seance date : " + seance.hour);
 
-  var reservationSheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(reservationSheetName);
+  const reservationSheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(reservationSheetName);
   appendDataToColumn(
     reservationSheet, 
     movie.title, 
@@ -265,11 +275,12 @@ export const addReservation = (movie, seance, structureType, structure, nbrParti
     nbrExos,
     structure
   );
+  return true;
 }
 
 // Utilitaires
 function getNextColumn(currentCell) {
-  var currentColumnInInt = currentCell.charCodeAt(0);
+  const currentColumnInInt = currentCell.charCodeAt(0);
   return String.fromCharCode(currentColumnInInt + 1) + currentCell[1]; 
 }
 
@@ -283,8 +294,8 @@ function getLastRowNext(sheet) {
 }
 
 function appendToColumn(sheet, column, content) {
-  var lastRow = getLastRowNext(sheet);
-  var positionAppended = column + lastRow;
+  const lastRow = getLastRowNext(sheet);
+  const positionAppended = column + lastRow;
   sheet.getRange(positionAppended).setValue(content);
   return positionAppended;
 }
@@ -304,12 +315,12 @@ function formatPhoneNumber(number) {
   if(number == null || number.trim() == "")
     return "No Number";
 
-  var ui = SpreadsheetApp.getUi();
+  // const ui = SpreadsheetApp.getUi();
   const phoneRegex = new RegExp(/^\d*$/)
   if(phoneRegex.test(number)) {
     if (number.length == 10) {
-      var phonePart = [];
-      for (var i = 0; i < number.length-1; i += 2) {
+      const phonePart = [];
+      for (let i = 0; i < number.length-1; i += 2) {
         // ui.alert("Number : " + number + " \n Length : " + number.length + " \n Index : " + i + " \n phonePart : " + phonePart)
         phonePart.push(number.substring(i, i + 2));
       }
@@ -337,7 +348,6 @@ export function init() {
   const necessarySheetNames = [
     movieSheetName,
     movieHourSheetName,
-    groupSheetName,
     schoolSheetName,
     recreationCenterSheetName,
     dayCareSheetName,
@@ -349,10 +359,13 @@ export function init() {
     ReportAssoSheetName,
     ReportSchoolSheetName
   ];
-  var activeSpreadsheet = SpreadsheetApp.getActiveSpreadsheet();
+  const activeSpreadsheet = SpreadsheetApp.getActiveSpreadsheet();
+  const ui = SpreadsheetApp.getUi();
+  ui.alert('Création des sheets');
+  ui.alert(necessarySheetNames.join(','));
 
   necessarySheetNames.forEach(name => {
-    var newSheet = activeSpreadsheet.getSheetByName(name);
+    let newSheet = activeSpreadsheet.getSheetByName(name);
     if (newSheet == null) {
       newSheet = activeSpreadsheet.insertSheet();
       newSheet.setName(name);
