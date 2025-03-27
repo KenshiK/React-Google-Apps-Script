@@ -44,13 +44,15 @@ export const movieHourSheet = SpreadsheetApp
   .getSheetByName(movieHourSheetName)
 
 export const createEvent = (dateToParse : string, movie : string) => {
-//   var ui = SpreadsheetApp.getUi();
+  // var ui = SpreadsheetApp.getUi();
 //   //ui.alert("On est dans event");
 
+  // ui.alert("Date a parse " + dateToParse);
   const calendar = CalendarApp.getDefaultCalendar();
   // var calendar = CalendarApp.getCalendarsByName(calendarName).shift();
-  const date = new Date(dateToParse);
-  //ui.alert("Date en typescript " + date);
+  let date = new Date(dateToParse);
+  date = addHours(date, -8) // quand la date est parsé elle est pas sur le bon fuseau horaire 
+  // ui.alert("Date en typescript " + date + " ou " + date.toString());
 
   return calendar.createEvent("Séance pour le film '" + movie + "'", 
   date,
